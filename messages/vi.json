@@ -1,0 +1,122 @@
+{
+  "Metadata": {
+    "title": "UC Yield — Hạ tầng dữ liệu real-yield xác minh được trên Base",
+    "description": "Issuer commit hash dữ liệu vận hành lên Shadow Ledger. Raw data không bao giờ on-chain. Live on Base Sepolia."
+  },
+  "Header": {
+    "howItWorks": "Cách hoạt động",
+    "features": "Tính năng",
+    "technology": "Công nghệ",
+    "pilot": "Pilot",
+    "faq": "FAQ",
+    "tryItNow": "Dùng thử ngay →"
+  },
+  "Hero": {
+    "badgeLive": "Live on Base Sepolia",
+    "badgeVersion": "Shadow Ledger v2",
+    "h1Line1": "Hạ tầng dữ liệu ",
+    "h1Highlight": "real-yield",
+    "h1Line2": "xác minh được",
+    "h1Line3": "trên Base",
+    "subtitle": "Issuer commit hash xác định của dữ liệu vận hành lên smart contract. Dữ liệu thô không bao giờ on-chain — bất kỳ ai cũng có thể xác minh lại.",
+    "ctaTry": "Dùng thử ngay →",
+    "ctaHow": "Cách hoạt động ↓",
+    "trust1": "Không giữ private key",
+    "trust2": "Hash xác định",
+    "trust3": "Đã verify trên Basescan",
+    "statsHashing": "100% deterministic hashing",
+    "statsBytes": "0 raw bytes on-chain",
+    "statsRoles": "5 vai trò kiểm soát truy cập",
+    "statsSteps": "3 steps to commit",
+    "ledgerTitle": "Shadow Ledger — Live commitments"
+  },
+  "TrustBar": {
+    "items": "BASE ✦ BASESCAN VERIFIED ✦ SHADOW LEDGER ✦ NON-CUSTODIAL ✦ DETERMINISTIC HASHING ✦ AES-GCM OFF-CHAIN ✦ CAS ENERGY PILOT ✦ ORACLE-VERIFIED BY CHAINLINK CRE ✦"
+  },
+  "HowItWorks": {
+    "eyebrow": "Quy trình",
+    "title": "Từ file dữ liệu đến commitment on-chain",
+    "subtitle": "Ba bước, ba phút, một hash duy nhất cho mỗi kỳ dữ liệu.",
+    "step1Title": "Tải lên & chuẩn hóa",
+    "step1Desc": "File metrics được chuẩn hóa thành bytes xác định, băm keccak256 thành Merkle root.",
+    "step2Title": "Ký & commit on-chain",
+    "step2Desc": "Ví của issuer (CDP/MetaMask) ký giao dịch commitData, tự trả gas, nhận receipt.",
+    "step3Title": "Oracle xác minh & niêm phong",
+    "step3Desc": "Mạng lưới oracle Chainlink CRE xác minh commitment và niêm phong trạng thái OracleVerified on-chain."
+  },
+  "Features": {
+    "eyebrow": "Tính năng lõi",
+    "title": "Vì sao investor tin được?",
+    "subtitle": "On-chain chỉ có hash/root + metadata. Dữ liệu thô không bao giờ on-chain.",
+    "f1Title": "Commitment-first",
+    "f1Desc": "On-chain chỉ lưu hash/root + metadata. Dữ liệu thô nằm off-chain, mã hóa AES-GCM.",
+    "f2Title": "Xác định tuyệt đối",
+    "f2Desc": "Cùng một input, cùng một hash — ở mọi nơi, mãi mãi.",
+    "f3Title": "Không giữ key",
+    "f3Desc": "Private key không bao giờ chạm vào server của chúng tôi.",
+    "f4Title": "Mở rộng không đập đi xây lại",
+    "f4Desc": "Thêm loại tài sản mới không đổi core — chỉ cần schemaVersion mới.",
+    "banner": "Mạng lưới Oracle Verification (Chainlink CRE) · Decentralized verification →"
+  },
+  "Technology": {
+    "title": "Xây bằng đồ thật, mở để kiểm chứng",
+    "purity": "Engine độc lập — không phụ thuộc nội bộ",
+    "viewContract": "Xem contract ↗",
+    "readDocs": "Đọc tài liệu ↗",
+    "deployed": "Đã deploy:",
+    "verified": "Đã verify ✓",
+    "oracleBadge": "Xác minh oracle — đang chạy pilot trên testnet",
+    "oracleFootnote": "Mainnet verification pending DON deployment."
+  },
+  "Pilot": {
+    "chip": "Pilot — CAS Energy",
+    "title": "Điện mặt trời: từ số kWh đến commitment on-chain",
+    "metric1Val": "1.284 MWh",
+    "metric1Lbl": "sản lượng",
+    "metric2Lbl": "Kỳ dữ liệu",
+    "metric3Lbl": "Root",
+    "quote": "\"Chúng tôi muốn mỗi kỳ sản lượng đều có một hash để đối chiếu — không còn tranh cãi về số liệu.\"",
+    "cta": "Mở issuer dashboard →",
+    "disclaimer": "Số liệu minh họa từ sample dataset — đang mapping dữ liệu thật."
+  },
+  "FAQ": {
+    "title": "Câu hỏi investor hay hỏi",
+    "q1": "Đã lên mainnet chưa?",
+    "a1": "Chưa. Phase 1 chạy trên Base Sepolia. Mainnet cần legal readiness gate — xem footnote.",
+    "q2": "Các bạn có giữ tiền hoặc private key của tôi không?",
+    "a2": "Không. Ví do bạn tự giữ (CDP/MetaMask), ký ngay trên máy bạn.",
+    "q3": "Dữ liệu thô của tôi nằm ở đâu?",
+    "a3": "Off-chain, mã hóa AES-GCM. On-chain chỉ có hash, Merkle root và metadata.",
+    "q4": "Oracle xác minh thế nào?",
+    "a4": "Mạng lưới Chainlink CRE nhận commitmentId, gọi OracleConsumer on-chain và niêm phong trạng thái OracleVerified. Hiện chạy trên testnet pilot qua local simulator; bản mainnet sẽ dùng DON consensus đầy đủ.",
+    "q5": "Ai dùng issuer dashboard?",
+    "a5": "Đội ngũ issuer: upload dữ liệu, ký commit, xem lịch sử commitment.",
+    "q6": "Tôi xác minh độc lập thế nào?",
+    "a6": "Lấy file gốc + chạy lib hashing công khai — so root với on-chain trên Basescan."
+  },
+  "CTA": {
+    "title": "Mang dữ liệu yield của bạn lên ledger.",
+    "subtitle": "Testnet miễn phí · Không giữ key · 3 phút cho commitment đầu tiên.",
+    "subline": "Get OracleVerified on testnet in minutes.",
+    "btn": "Dùng thử ngay — Mở issuer dashboard →"
+  },
+  "Footer": {
+    "tagline": "Hạ tầng dữ liệu real-yield xác minh được trên Base.",
+    "builtOnBase": "Built on Base",
+    "systemsOperational": "All systems operational",
+    "col1": "Sản phẩm",
+    "col1Item1": "Issuer dashboard",
+    "col2": "Nhà phát triển",
+    "col2Item1": "Smart contract",
+    "col2Item2": "Documentation",
+    "col2Item3": "Hashing library",
+    "status": "Status: Sepolia",
+    "col3": "Pháp lý & Liên hệ",
+    "col3Item1": "Phase 1 Sepolia-only",
+    "col3Item2": "Pilot gated",
+    "bottom1": "© 2026 UC Yield",
+    "bottom2": "Commitment-first · Raw data never on-chain",
+    "bottom3": "Back to top ↑",
+    "footnote": "Phase 1 = chỉ Sepolia · Pilot giới hạn · Mainnet cần legal readiness."
+  }
+}
