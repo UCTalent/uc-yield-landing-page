@@ -1,0 +1,63 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    id: Build
+    args:
+      - build
+      - --no-cache
+      - -t
+      - $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/ucyield/ucyield-landing-page:$COMMIT_SHA
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    id: Push
+    args:
+      - push
+      - $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/ucyield/ucyield-landing-page:$COMMIT_SHA
+
+  - name: ubuntu
+    id: Render-env
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        printf '%s\n' \
+          'NODE_ENV=production' \
+          'PORT=3000' \
+          'HOSTNAME=0.0.0.0' \
+          > /workspace/.env
+
+  - name: ubuntu
+    id: Deploy
+    waitFor: [Push, Render-env]
+    entrypoint: bash
+    secretEnv: [ROUTER_TOKEN, TAILSCALE_AUTHKEY]
+    env:
+      - SERVICE=ucyield-landing-page
+      - IMAGE=$_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/ucyield/ucyield-landing-page:$COMMIT_SHA
+      - ENV_FILE=/workspace/.env
+      - ROUTER_URL=${_ROUTER_URL}
+    args: [deploy/scripts/deploy-via-router.sh]
+
+images:
+  - $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/ucyield/ucyield-landing-page:$COMMIT_SHA
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/deploy-router-token/versions/latest
+      env: ROUTER_TOKEN
+    - versionName: projects/$PROJECT_ID/secrets/TAILSCALE_AUTH_KEY_DEV/versions/active
+      env: TAILSCALE_AUTHKEY
+
+substitutions:
+  _AR_HOSTNAME: asia-southeast1-docker.pkg.dev
+  _AR_PROJECT_ID: uctalent-dev
+  _AR_REPOSITORY: cloud-run-source-deploy
+  _ROUTER_URL: http://100.85.11.97:8001
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: 1800s
+
+tags: [deploy-router, ucyield, ucyield-landing-page]

@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.gitignore
+Dockerfile
+cloudbuild*.yml
+npm-debug.log*
+pnpm-debug.log*
+README.md
+docs

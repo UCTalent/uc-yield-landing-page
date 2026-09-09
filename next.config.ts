@@ -6,6 +6,16 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.ucyield.com' }],
+        destination: 'https://ucyield.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
