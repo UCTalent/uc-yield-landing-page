@@ -76,7 +76,7 @@ export function Header({ locale, dict }: { locale: string; dict: any }) {
         )}
       <div className="max-w-[1200px] mx-auto px-6 h-full flex items-center justify-between">
         <Link href="/" className="flex items-center">
-          <Image src="/ucYield.png" alt="UC Yield" width={200} height={200} className="h-[60px] w-auto object-contain hover:opacity-90 transition-opacity" />
+          <Image src="/ucYield-final.png" alt="UC Yield" width={1204} height={312} className="h-[60px] w-auto object-contain hover:opacity-90 transition-opacity" />
         </Link>
         <nav className="hidden lg:flex gap-8">
           {[

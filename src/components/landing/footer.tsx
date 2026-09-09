@@ -13,7 +13,7 @@ export function Footer({ dict, hDict }: { dict: any; hDict: any }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-12 mb-16">
           <div>
             <Link href="/" className="inline-block mb-6">
-              <Image src="/ucYield.png" alt="UC Yield" width={240} height={240} className="h-[72px] w-auto object-contain hover:opacity-90 transition-opacity" />
+              <Image src="/ucYield-final.png" alt="UC Yield" width={1204} height={312} className="h-[72px] w-auto object-contain hover:opacity-90 transition-opacity" />
             </Link>
             <p className="text-mist text-sm mb-6 max-w-xs">{dict.tagline}</p>
             <div className="inline-block px-3 py-1 bg-white/5 border border-line rounded-full text-xs font-semibold mb-4 text-mist">{dict.builtOnBase}</div>
