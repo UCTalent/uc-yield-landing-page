@@ -35,11 +35,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       siteName: 'UC Yield',
       locale: locale,
       type: 'website',
+      images: [
+        {
+          url: `/api/og?title=${encodeURIComponent(t('title'))}&desc=${encodeURIComponent(t('description'))}`,
+          width: 1200,
+          height: 630,
+          alt: t('title'),
+        }
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: t('title'),
       description: t('description'),
+      images: [`/api/og?title=${encodeURIComponent(t('title'))}&desc=${encodeURIComponent(t('description'))}`],
     }
   };
 }
@@ -70,7 +79,7 @@ export default async function LocaleLayout({
               "@type": "Organization",
               "name": "UC Yield",
               "url": "https://ucyield.com",
-              "logo": "https://ucyield.com/icon.svg",
+              "logo": "https://ucyield.com/thumnail_logo.png",
               "sameAs": [
                 "https://twitter.com/ucyield"
               ]
