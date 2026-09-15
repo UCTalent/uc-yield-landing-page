@@ -33,21 +33,21 @@ export function MerkleMini() {
     >
       <div className="text-center font-display font-semibold text-ice mb-8">Merkle Tree Structure</div>
       
-      <div className="flex flex-col items-center gap-8 relative z-10 w-full">
+      <div className="flex flex-col items-center relative z-10 w-full">
         {/* Root */}
         <motion.div 
           onHoverStart={() => setHoveredNode(0)}
           onHoverEnd={() => setHoveredNode(null)}
-          className={`px-6 py-3 rounded-xl border ${hoveredNode !== null ? 'border-cyan bg-cyan/10' : 'border-line bg-card'} font-mono text-sm transition-all cursor-pointer z-10`}
+          className={`relative px-6 py-3 rounded-xl border ${hoveredNode !== null ? 'border-cyan bg-cyan/10' : 'border-line bg-card'} font-mono text-sm transition-all cursor-pointer z-10`}
         >
           {root}
         </motion.div>
 
         {/* Connecting Lines Level 1 */}
-        <div className="absolute top-[44px] w-full h-[40px] pointer-events-none">
+        <div className="w-full h-[32px] pointer-events-none">
           <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-            <path d="M50,0 L25,100" fill="none" stroke={hoveredNode === 1 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
-            <path d="M50,0 L75,100" fill="none" stroke={hoveredNode === 2 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
+            <path vectorEffect="non-scaling-stroke" d="M50,0 L30,100" fill="none" stroke={hoveredNode === 1 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
+            <path vectorEffect="non-scaling-stroke" d="M50,0 L70,100" fill="none" stroke={hoveredNode === 2 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
           </svg>
         </div>
 
@@ -58,7 +58,7 @@ export function MerkleMini() {
               key={i}
               onHoverStart={() => setHoveredNode(i + 1)}
               onHoverEnd={() => setHoveredNode(null)}
-              className={`px-4 py-2 rounded-lg border ${hoveredNode === i + 1 || hoveredNode === 0 ? 'border-cyan bg-cyan/10' : 'border-line bg-card'} font-mono text-xs transition-all cursor-pointer`}
+              className={`relative px-4 py-2 rounded-lg border ${hoveredNode === i + 1 || hoveredNode === 0 ? 'border-cyan bg-cyan/10' : 'border-line bg-card'} font-mono text-xs transition-all cursor-pointer`}
             >
               {node}
             </motion.div>
@@ -66,12 +66,12 @@ export function MerkleMini() {
         </div>
 
         {/* Connecting Lines Level 2 */}
-        <div className="absolute top-[124px] w-[80%] h-[40px] pointer-events-none left-[10%]">
+        <div className="w-[80%] h-[32px] pointer-events-none">
           <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-            <path d="M20,0 L5,100" fill="none" stroke={hoveredNode === 1 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
-            <path d="M20,0 L35,100" fill="none" stroke={hoveredNode === 1 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
-            <path d="M80,0 L65,100" fill="none" stroke={hoveredNode === 2 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
-            <path d="M80,0 L95,100" fill="none" stroke={hoveredNode === 2 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
+            <path vectorEffect="non-scaling-stroke" d="M25,0 L1.25,100" fill="none" stroke={hoveredNode === 1 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
+            <path vectorEffect="non-scaling-stroke" d="M25,0 L33.75,100" fill="none" stroke={hoveredNode === 1 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
+            <path vectorEffect="non-scaling-stroke" d="M75,0 L66.25,100" fill="none" stroke={hoveredNode === 2 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
+            <path vectorEffect="non-scaling-stroke" d="M75,0 L98.75,100" fill="none" stroke={hoveredNode === 2 || hoveredNode === 0 ? "var(--color-cyan)" : "var(--color-line)"} strokeWidth="2" />
           </svg>
         </div>
 

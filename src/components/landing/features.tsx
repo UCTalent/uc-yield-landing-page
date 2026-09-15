@@ -16,10 +16,21 @@ export function Features({ dict }: { dict: any }) {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Reveal delay={0.1}>
-            <SpotlightCard className="p-8 h-full">
+            <SpotlightCard className="p-8 h-full flex flex-col">
               <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 text-white flex items-center justify-center mb-5"><Layers className="w-6 h-6" /></div>
               <h3 className="text-xl font-display font-bold mb-3">{dict.f1Title}</h3>
-              <p className="text-mist">{dict.f1Desc}</p>
+              <p className="text-mist mb-4">{dict.f1Desc}</p>
+              <div className="mt-auto mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-lg">
+                <video
+                  src="/commit-demo.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="w-full h-auto block rounded-xl"
+                />
+              </div>
             </SpotlightCard>
           </Reveal>
           <Reveal delay={0.2}>

@@ -78,24 +78,28 @@ export function CommitFlowDemo({ dict }: { dict?: any }) {
         {/* Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)] opacity-30"></div>
         
-        <div className="relative flex flex-col md:flex-row justify-between items-center gap-8 md:gap-0 z-10">
+        <div className="relative flex flex-col md:flex-row justify-between items-center md:items-start gap-8 md:gap-0 z-10">
           
           {/* Connector Lines (Desktop) */}
-          <div className="hidden md:block absolute top-1/2 left-[15%] right-[15%] h-[2px] -translate-y-1/2 bg-line z-0">
+          <div className="hidden md:flex absolute top-[40px] left-[15%] right-[15%] h-[2px] -translate-y-1/2 z-0 justify-between">
             {/* Step 1 to 2 */}
-            <motion.div 
-              className="absolute left-0 top-0 bottom-0 bg-cyan shadow-[0_0_10px_#00D4FF]"
-              initial={{ width: "0%" }}
-              animate={{ width: step >= 2 ? "50%" : "0%" }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-            />
+            <div className="relative h-full w-[calc(50%-48px)] bg-line">
+              <motion.div 
+                className="absolute left-0 top-0 bottom-0 bg-cyan shadow-[0_0_10px_#00D4FF]"
+                initial={{ width: "0%" }}
+                animate={{ width: step >= 2 ? "100%" : "0%" }}
+                transition={{ duration: 1, ease: "easeInOut" }}
+              />
+            </div>
             {/* Step 2 to 3 */}
-            <motion.div 
-              className="absolute left-[50%] top-0 bottom-0 bg-[#22C55E] shadow-[0_0_10px_#22C55E]"
-              initial={{ width: "0%" }}
-              animate={{ width: step >= 3 ? "50%" : "0%" }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-            />
+            <div className="relative h-full w-[calc(50%-48px)] bg-line">
+              <motion.div 
+                className="absolute left-0 top-0 bottom-0 bg-[#22C55E] shadow-[0_0_10px_#22C55E]"
+                initial={{ width: "0%" }}
+                animate={{ width: step >= 3 ? "100%" : "0%" }}
+                transition={{ duration: 1, ease: "easeInOut" }}
+              />
+            </div>
           </div>
 
           {/* Node 1: Commit */}

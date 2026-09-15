@@ -56,8 +56,11 @@ export function Technology({ dict }: { dict: any }) {
           
           <Reveal delay={0.4}>
             <div className="flex gap-4">
-              <Button variant="outline" className="rounded-full border-[#2A3F68] text-[#DCE6FF] hover:bg-white/5">{dict.viewContract}</Button>
-              <Button variant="outline" className="rounded-full border-[#2A3F68] text-[#DCE6FF] hover:bg-white/5">{dict.readDocs}</Button>
+              <Button asChild variant="outline" className="rounded-full border-[#2A3F68] text-[#DCE6FF] hover:bg-white/5">
+                <a href="https://sepolia.basescan.org/address/0x0DC94FAe3DD2D9852d63C996976cbb80B2F4FDD7" target="_blank" rel="noopener noreferrer">
+                  {dict.viewContract}
+                </a>
+              </Button>
             </div>
           </Reveal>
         </div>
