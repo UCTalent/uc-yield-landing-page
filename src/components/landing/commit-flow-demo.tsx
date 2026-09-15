@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CloudUpload, ShieldCheck, CheckCircle, Play, Server, FileJson, Lock } from 'lucide-react';
+import { CloudUpload, ShieldCheck, CheckCircle, Play, Lock } from 'lucide-react';
 import { Reveal } from '../motion/reveal';
 
 const LOG_SCRIPT = [

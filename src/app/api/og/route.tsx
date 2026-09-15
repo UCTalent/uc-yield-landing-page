@@ -36,7 +36,8 @@ export async function GET(request: NextRequest) {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 40 }}>
-            <img src={logoUrl} width="120" height="120" style={{ borderRadius: 16 }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoUrl} width="120" height="120" alt="UC Yield Logo" style={{ borderRadius: 16 }} />
           </div>
           
           <h1 style={{ fontSize: 64, fontWeight: 'bold', margin: 0, fontFamily: 'sans-serif', textAlign: 'center' }}>

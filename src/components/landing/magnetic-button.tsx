@@ -57,6 +57,7 @@ export function MagneticButton({
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove as any);
     return () => window.removeEventListener("mousemove", handleMouseMove as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

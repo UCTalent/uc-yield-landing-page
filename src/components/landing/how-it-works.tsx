@@ -1,7 +1,7 @@
-import { CloudUpload, SquarePen, ShieldCheck, Check } from 'lucide-react';
+
 import { Reveal } from '../motion/reveal';
 import { HashFlow } from './hash-flow';
-import { SpotlightCard } from './spotlight-card';
+
 import { SectionHeading } from './section-heading';
 import { CommitFlowDemo } from './commit-flow-demo';
 
