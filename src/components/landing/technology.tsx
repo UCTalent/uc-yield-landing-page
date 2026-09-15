@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { CodeWindow } from './code-window';
 import { Reveal } from '../motion/reveal';
 import { ArchitectureStrip } from './architecture-strip';
@@ -56,11 +56,14 @@ export function Technology({ dict }: { dict: any }) {
           
           <Reveal delay={0.4}>
             <div className="flex gap-4">
-              <Button asChild variant="outline" className="rounded-full border-[#2A3F68] text-[#DCE6FF] hover:bg-white/5">
-                <a href="https://sepolia.basescan.org/address/0x0DC94FAe3DD2D9852d63C996976cbb80B2F4FDD7" target="_blank" rel="noopener noreferrer">
-                  {dict.viewContract}
-                </a>
-              </Button>
+              <a 
+                href="https://sepolia.basescan.org/address/0x0DC94FAe3DD2D9852d63C996976cbb80B2F4FDD7" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={buttonVariants({ variant: "outline", className: "rounded-full border-[#2A3F68] text-[#DCE6FF] hover:bg-white/5" })}
+              >
+                {dict.viewContract}
+              </a>
             </div>
           </Reveal>
         </div>

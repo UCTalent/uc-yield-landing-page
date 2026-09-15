@@ -11,6 +11,7 @@ export function PilotVisual() {
           src="/pilot-solar.webp"
           alt="Solar pilot facility"
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           priority
           className="object-cover opacity-40 mix-blend-luminosity"
         />

@@ -22,7 +22,7 @@ export function Features({ dict }: { dict: any }) {
               <p className="text-mist mb-4">{dict.f1Desc}</p>
               <div className="mt-auto mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-lg">
                 <video
-                  src="/commit-demo.mp4"
+                  src="https://storage.googleapis.com/unchain-web/ucyield/2aOboQymxLWbzd4ABnhHnIqCGVO9vQ4BdrryKGQq.mp4"
                   autoPlay
                   loop
                   muted

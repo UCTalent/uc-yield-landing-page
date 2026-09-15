@@ -69,7 +69,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`}>
+    <html lang={locale} className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -87,7 +87,7 @@ export default async function LocaleLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased bg-abyss text-ice selection:bg-base selection:text-white relative">
+      <body className="font-sans antialiased bg-abyss text-ice selection:bg-base selection:text-white relative" suppressHydrationWarning>
         <div className="bg-noise z-0"></div>
         <div className="relative z-10">
           <NextIntlClientProvider messages={messages}>
