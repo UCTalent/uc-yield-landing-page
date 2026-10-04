@@ -1,0 +1,913 @@
+{
+  "groups": [
+    {
+      "id": "start",
+      "title": "Getting started"
+    },
+    {
+      "id": "concepts",
+      "title": "Core concepts"
+    },
+    {
+      "id": "guides",
+      "title": "Issuer guides"
+    },
+    {
+      "id": "verify",
+      "title": "Verification"
+    },
+    {
+      "id": "reference",
+      "title": "Technical reference"
+    },
+    {
+      "id": "resources",
+      "title": "Resources"
+    }
+  ],
+  "pages": [
+    {
+      "slug": "introduction",
+      "group": "start",
+      "title": "What is UCYield?",
+      "description": "Understand the real-yield data infrastructure, its users, and the purpose of Shadow Ledger.",
+      "sources": [
+        "docs/prd/UCYield_Phase1_Base_Funding.md",
+        "docs/adr/ADR-0022-consolidate-shadow-ledger-into-monorepo.md",
+        "docs/adr/ADR-0031-ucyield-verified-v2.md"
+      ],
+      "sections": [
+        {
+          "id": "purpose",
+          "title": "A history you can verify",
+          "paragraphs": [
+            "UCYield helps organizations turn operating data into verifiable records. Each record has a cryptographic identity; authorized parties can download its evidence and reproduce the result.",
+            "Shadow Ledger anchors that identity on Base Sepolia, adding a public point of comparison. Operating values remain encrypted off-chain."
+          ]
+        },
+        {
+          "id": "audience",
+          "title": "Who uses UCYield?",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "User",
+              "Work"
+            ],
+            "rows": [
+              [
+                "Issuer",
+                "Record operating data and manage plants and record history."
+              ],
+              [
+                "Invited viewer",
+                "Read and verify data for the plants they are allowed to access."
+              ],
+              [
+                "Technical partner / auditor",
+                "Reproduce results with the independent engine and CLI."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "scope",
+          "title": "Current scope",
+          "paragraphs": [
+            "Phase 1 focuses on data infrastructure on Base Sepolia. UCYield Verified checks integrity and reproducibility; it does not establish whether a plant reported truthful operating values.",
+            "The older RWA/B20 issuance modules are retained as frozen reference code. Mainnet, payments, distributions, and funding rounds belong to separately gated work."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "quickstart",
+      "group": "start",
+      "title": "Your first record",
+      "description": "Go from a data file to a verified record and downloadable evidence.",
+      "sources": [
+        "apps/issuer-dashboard/src/app/dashboard/data/commit/page.tsx",
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "apps/api/src/modules/shadow-ledger/api/anchor-batches.controller.ts"
+      ],
+      "sections": [
+        {
+          "id": "prepare",
+          "title": "Before you start",
+          "paragraphs": [
+            "You need an issuer session, an active organization, and write access to a registered plant. Prepare monthly data and check the plant timezone.",
+            "Start with a completed month. Use a JSON file with schemaVersion 2.0.0, a matching plantCode, and registered metrics. Select the record type in the dashboard."
+          ]
+        },
+        {
+          "id": "workflow",
+          "title": "Follow the workflow",
+          "paragraphs": [],
+          "list": [
+            "Select the plant and record type, then upload the JSON file.",
+            "Review periods, metrics, and validation errors; confirm the record.",
+            "Wait for off-chain verification to complete.",
+            "If the record and plan are eligible, an IssuerAdmin authorizes anchoring with the embedded CDP wallet. The platform pays transaction fees.",
+            "Wait for finalized confirmation, then open the detail view and download the evidence bundle."
+          ]
+        },
+        {
+          "id": "check",
+          "title": "Check the result",
+          "paragraphs": [
+            "Read lifecycle, verification, anchoring, and integrity states separately. An internally committed record can be Verified without being Anchored.",
+            "Download the evidence and use /verify in the issuer dashboard. Chain comparison requires the CLI with an RPC connection and an independently confirmed ledger address."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "shadow-ledger",
+      "group": "concepts",
+      "title": "Shadow Ledger",
+      "description": "Distinguish internal data, the recordRoot identity, and anchoring evidence on Base.",
+      "sources": [
+        "docs/specs/ucy-hash-v2.md",
+        "contracts/src/ShadowLedger.sol",
+        "contracts/src/ShadowLedgerV3.sol"
+      ],
+      "sections": [
+        {
+          "id": "identity",
+          "title": "One identity for a record",
+          "paragraphs": [
+            "recordRoot binds the header and every period in the record. The header includes source, plant, timezone, and registryHash; each period has its own salt.",
+            "The same document and salts yield the same recordRoot. Separate ingestions of identical values can produce different roots because salts and metadata differ."
+          ]
+        },
+        {
+          "id": "layers",
+          "title": "Two storage layers",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Layer",
+              "Contents"
+            ],
+            "rows": [
+              [
+                "Off-chain",
+                "Document, source, salts, registry snapshot, seal, and log."
+              ],
+              [
+                "On-chain",
+                "recordRoot, opaque references, metadata, and transaction evidence."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "versions",
+          "title": "Ledger v2 and v3",
+          "paragraphs": [
+            "v2 uses period keys and a revision flow. v3 accepts independent records with overlapping months; the contract computes a periodSlot from organization, plant, record type, and month, then increments its anchor sequence.",
+            "Historical records must be verified against the correct ledger and bundle version. v3 source code does not confirm a v3 deployment; check configuration and deployment evidence before relying on v3 behavior."
+          ]
+        }
+      ],
+      "notice": "Both v2 and v3 are present in source. A live v3 deployment was not confirmed during this review."
+    },
+    {
+      "slug": "record-lifecycle",
+      "group": "concepts",
+      "title": "Record lifecycle",
+      "description": "Read Committed, Verified, Anchored, and integrity states correctly.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/domain/record-verification-state.ts",
+        "apps/api/src/modules/shadow-ledger/domain/record-anchor-state.ts",
+        "docs/adr/ADR-0036-verification-retry-exhaustion.md"
+      ],
+      "sections": [
+        {
+          "id": "axes",
+          "title": "Four independent axes",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Axis",
+              "Meaning"
+            ],
+            "rows": [
+              [
+                "Pending → Committed",
+                "Confirm the record, create a seal, and append the log."
+              ],
+              [
+                "Pending / Queued / Verifying / Verified / Failed",
+                "Progress and outcome of the verification request."
+              ],
+              [
+                "OffChain → Anchored",
+                "The complete finalized receipt and events have been matched."
+              ],
+              [
+                "Ok → Broken",
+                "Monitoring has found contradictory evidence."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "finality",
+          "title": "Wait for finality",
+          "paragraphs": [
+            "Submitting a transaction does not make a record Anchored. A successful receipt and matching events at a finalized block are required.",
+            "After anchoring, the system verifies again with chain evidence. The earlier off-chain result and the on-chain result are distinct steps."
+          ]
+        },
+        {
+          "id": "recovery",
+          "title": "Infrastructure errors and invalid evidence",
+          "paragraphs": [
+            "An unavailable RPC, storage dependency, or trust configuration is not invalid evidence. The request remains Queued with an infrastructure code for recovery.",
+            "When automatic retries are exhausted, the interface indicates that retries stopped. Once the dependency recovers, re-verification creates a new request. Actual cryptographic contradictions produce Failed."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "privacy",
+      "group": "concepts",
+      "title": "Privacy & access",
+      "description": "Understand public chain data and operating data available only to authorized readers.",
+      "sources": [
+        "docs/adr/ADR-0031-ucyield-verified-v2.md",
+        "apps/api/src/modules/organizations/plant-access.service.ts",
+        "apps/api/src/modules/shadow-ledger/application/record-l2-reader.service.ts"
+      ],
+      "sections": [
+        {
+          "id": "public",
+          "title": "What is public",
+          "paragraphs": [
+            "EVM hashes, metadata, and transactions are publicly observable. Operating values, personal names, and credentials do not belong in calldata.",
+            "Per-period salts and opaque references reduce the ability to guess values from roots. They do not conceal all metadata or relationships between anchors."
+          ]
+        },
+        {
+          "id": "private",
+          "title": "Operating values require authorization",
+          "paragraphs": [
+            "Documents and source data are encrypted off-chain. The API checks organization, active membership, and plant scope before serving data or evidence.",
+            "Invited viewers can access only their granted plants. Knowing a recordId or a public transaction does not grant access to confidential data."
+          ]
+        },
+        {
+          "id": "sharing",
+          "title": "Sharing evidence bundles",
+          "paragraphs": [
+            "An evidence bundle can contain operating values, salts, and source material needed to recompute the root. Anyone receiving the file can read its contents.",
+            "Share bundles only with parties authorized to receive those values. Revoking API access cannot recall a previously downloaded file."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "upload-data",
+      "group": "guides",
+      "title": "Upload operating data",
+      "description": "Prepare JSON with a matching plant, calendar periods, and registered metrics.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "packages/hashing/src/schema-v2.ts",
+        "docs/specs/ucy-hash-v2.md"
+      ],
+      "sections": [
+        {
+          "id": "format",
+          "title": "Currently accepted file format",
+          "paragraphs": [
+            "The ingest endpoint accepts .json files up to 1,000,000 bytes. Select plantId and recordType in the dashboard; do not add a header or salts to the upload file.",
+            "The example uses a fictional plant. Replace plantCode with your real plant code and use metrics registered for its asset category."
+          ],
+          "code": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"plantCode\": \"SOLAR-DEMO-01\",\n  \"periods\": [\n    {\n      \"period\": \"2026-08\",\n      \"metrics\": {\n        \"inverter_yield_kwh\": \"24000\",\n        \"ongrid_export_kwh\": \"22000\"\n      }\n    }\n  ]\n}",
+          "language": "JSON"
+        },
+        {
+          "id": "validation",
+          "title": "Validation rules",
+          "paragraphs": [],
+          "list": [
+            "Use YYYY-MM periods, 1–12 periods per record, and no repeated period within a file.",
+            "Prefer decimal strings for metrics with a decimal point; no exponents or thousands separators.",
+            "Metric keys must be registered and satisfy precision and range constraints.",
+            "Do not repeat JSON keys or add fields outside the schema."
+          ]
+        },
+        {
+          "id": "provisional",
+          "title": "Current month and provisional data",
+          "paragraphs": [
+            "In ledger v3 mode, a record containing the current month at ingestion is provisional. It can be committed and verified off-chain but cannot be anchored.",
+            "Provisional status is fixed by ingestedAt and timezone. Ingest again after the month closes to create a new record; the old record does not become final merely with time."
+          ]
+        }
+      ],
+      "notice": "CSV/XLSX and preview exist in library code / plans, but the inspected ingest endpoint accepts JSON only. Do not assume dashboard upload support."
+    },
+    {
+      "slug": "provider-ingestion",
+      "group": "guides",
+      "title": "Connect a data source",
+      "description": "The Huawei FusionSolar flow, plant binding, and fetch outcomes.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "apps/api/src/modules/shadow-ledger/application/fetch-executor.service.ts",
+        "docs/shadow-ledger/08-dual-ingestion-runbook.md",
+        "docs/adr/ADR-0035-canonical-ingestion-formats-and-provider-contract.md"
+      ],
+      "sections": [
+        {
+          "id": "connection",
+          "title": "Connect and bind a plant",
+          "paragraphs": [
+            "The provider flow uses server-managed credentials. Test the connection, choose a compatible mapping template, and bind the provider station code to the organization plant.",
+            "Keep passwords, tokens, and sensitive response content out of public documentation. Provider access and UCYield data access are separate scopes."
+          ]
+        },
+        {
+          "id": "fetch",
+          "title": "Fetch monthly data",
+          "paragraphs": [
+            "Authorized users can trigger a fetch or configure a schedule. The worker fetches the source, maps metrics, normalizes values, and creates records; the current fetch flow supports automatic off-chain commit.",
+            "An empty response or a month without values must not become zero. Inspect fetch outcomes to distinguish missing data, authentication problems, rate limits, and schema errors."
+          ]
+        },
+        {
+          "id": "coverage",
+          "title": "Integration boundaries",
+          "paragraphs": [
+            "Native Provider API, full source slicing/replay, and Huawei OAuth have separate specifications and plans. Publish them as usable features only after verifying their endpoints and interface flows.",
+            "This review inspected JSON upload and Huawei API-account fetch as the core paths. It does not certify a live provider connection or environment credentials."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "team-access",
+      "group": "guides",
+      "title": "Members & plant access",
+      "description": "Assign appropriate access to administrators, operators, and invited viewers.",
+      "sources": [
+        "apps/api/src/modules/organizations/plant-access.service.ts",
+        "apps/api/src/modules/shadow-ledger/api/anchor-batches.controller.ts"
+      ],
+      "sections": [
+        {
+          "id": "roles",
+          "title": "Application roles",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Role",
+              "Scope"
+            ],
+            "rows": [
+              [
+                "IssuerAdmin",
+                "Manage the organization and authorize eligible anchor batches."
+              ],
+              [
+                "IssuerOperator",
+                "Write records for plants with granted write access."
+              ],
+              [
+                "IssuerViewer",
+                "Read data and evidence for granted plants."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "plant-scope",
+          "title": "Plant-scoped permissions",
+          "paragraphs": [
+            "Membership does not grant access to every organization. The active session selects the organization; plant permissions determine readable and writable data.",
+            "Organization or plant status changes can invalidate an operation even if a button remains visible. The server rechecks authorization when executing."
+          ]
+        },
+        {
+          "id": "viewer",
+          "title": "Give a reviewer access",
+          "paragraphs": [
+            "Invite the viewer into the correct organization and grant only the plants they need. A viewer can download in-scope evidence for independent review.",
+            "Application roles and contract roles are different. A reader does not need issuer transaction signing authority."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ucyield-verified",
+      "group": "verify",
+      "title": "What does UCYield Verified mean?",
+      "description": "Reproducible checks, signed receipts, and the limits of the Verified claim.",
+      "sources": [
+        "docs/adr/ADR-0031-ucyield-verified-v2.md",
+        "packages/verifier/src/verify-record.ts",
+        "docs/adr/ADR-0036-verification-retry-exhaustion.md"
+      ],
+      "sections": [
+        {
+          "id": "claim",
+          "title": "What the result means",
+          "paragraphs": [
+            "UCYield Verified is the result of recomputation and evidence comparison, with a receipt signed by the verifier key. Authorized recipients can rerun the same engine.",
+            "The result protects integrity after commit. It does not establish the accuracy of a meter, revenue report, or values supplied by an issuer or provider."
+          ]
+        },
+        {
+          "id": "checks",
+          "title": "Two verification profiles",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Profile",
+              "Checks"
+            ],
+            "rows": [
+              [
+                "Off-chain · C1–C8",
+                "Parser/schema, canonical bytes, root, projection, source/registry, period identity, seal/log."
+              ],
+              [
+                "On-chain · C1–C10",
+                "Also checks finalized commitment evidence and issuer wallet organization binding."
+              ],
+              [
+                "Receipt",
+                "Signature, trusted key, evidence content, and record identity."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "limits",
+          "title": "Trust boundaries",
+          "paragraphs": [
+            "Obtain the trust store independently from the bundle. Keys declared by the evidence file itself are not a sufficient trust foundation.",
+            "Under ADR-0031, the active product does not claim Chainlink DON, OracleConsumer, or Nitro attestation. Those descriptions belong to earlier designs."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "independent-verification",
+      "group": "verify",
+      "title": "Verify evidence independently",
+      "description": "Download a bundle, choose an independent trust store, and run the browser verifier or CLI.",
+      "sources": [
+        "packages/verifier/src/cli.ts",
+        "packages/verifier/src/schemas.ts",
+        "apps/issuer-dashboard/src/hooks/use-public-evidence-verifier.ts"
+      ],
+      "sections": [
+        {
+          "id": "evidence",
+          "title": "Prepare evidence and trust",
+          "paragraphs": [
+            "Download evidence from the detail view while authorized for the plant. A bundle includes document, source, registry snapshot, seal, log, and receipts, with an anchor when present.",
+            "Obtain trust independently, for example from /api/v1/public/verifier-keys on a trusted API or finalized ledger events. Confirm the ledger address through a separate trusted channel."
+          ]
+        },
+        {
+          "id": "run",
+          "title": "Browser or CLI",
+          "paragraphs": [
+            "The issuer dashboard /verify page runs evidence checks in the browser. It is the starting point for an authorized recipient.",
+            "Run the commands below from the ucyield monorepo checkout with dependencies installed. The verifier is currently a private workspace package; do not assume a public npm installation. The second command uses an RPC connection and the ledger matching the bundle."
+          ],
+          "code": "pnpm --filter @ucyield/verifier ucy-verify \\\n  evidence.bundle.json --trust trust.json\n\npnpm --filter @ucyield/verifier ucy-verify \\\n  evidence.bundle.json --trust trust.json \\\n  --rpc \"$BASE_SEPOLIA_RPC_URL\" \\\n  --ledger \"$CONFIRMED_LEDGER_ADDRESS\" --json",
+          "language": "SHELL"
+        },
+        {
+          "id": "interpret",
+          "title": "Interpret the result",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Result",
+              "Meaning"
+            ],
+            "rows": [
+              [
+                "0 · pass",
+                "In-profile checks and receipts passed."
+              ],
+              [
+                "1 · fail",
+                "Contradictory evidence or an invalid receipt."
+              ],
+              [
+                "2 · unavailable",
+                "Infrastructure / finality is unavailable, or CLI usage is invalid."
+              ],
+              [
+                "C9–C10 · skip",
+                "No RPC was supplied; chain comparison was not performed."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "slug": "hashing",
+      "group": "reference",
+      "title": "Canonicalization & hashing",
+      "description": "ucy-hash-v2: canonical bytes, Merkle trees, salts, and recordRoot.",
+      "sources": [
+        "packages/hashing/src/canonicalize.ts",
+        "packages/hashing/src/hash-v2.ts",
+        "docs/specs/ucy-hash-v2.md"
+      ],
+      "sections": [
+        {
+          "id": "canonical",
+          "title": "From values to deterministic bytes",
+          "paragraphs": [
+            "Canonical JSON uses compact UTF-8, code-point key sorting, and Unicode NFC normalization. Keys that collide after normalization are rejected. Optional fields are omitted rather than set to null.",
+            "Metrics are canonical decimal strings, without floating-point arithmetic. 370.10 normalizes to 370.1; exponent notation and unknown schema fields are rejected."
+          ]
+        },
+        {
+          "id": "root",
+          "title": "Build the record identity",
+          "paragraphs": [
+            "The D_* constants separate hash domains; each period salt is 32 random bytes. The formulas below are a schematic, not a substitute implementation.",
+            "periodCount is ABI-encoded as uint256. The Merkle tree uses OpenZeppelin StandardMerkleTree with bytes32 values and its double-hashing convention, including for a single period."
+          ],
+          "code": "headerHash  = keccak256(utf8(canonical(header)))\ndataHash_i  = keccak256(utf8(canonical({metrics, period})))\nleaf_i      = keccak256(abi.encode(D_period, headerHash, dataHash_i, salt_i))\nperiodsRoot = StandardMerkleTree.of([[leaf_i]], [\"bytes32\"]).root\nrecordRoot  = keccak256(abi.encode(D_record, headerHash, periodsRoot, periodCount))",
+          "language": "ucy-hash-v2"
+        },
+        {
+          "id": "reproducible",
+          "title": "What must be retained",
+          "paragraphs": [
+            "Retain exact document bytes, source, salts, registry snapshot, and algorithm version. The uploaded metric file alone cannot reconstruct recordRoot because ingestion creates the header and salts.",
+            "A registry snapshot captured at ingestion lets historical records remain verifiable when the dictionary expands. Use repository golden vectors and the verifier engine to check compatibility."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "api",
+      "group": "reference",
+      "title": "Shadow Ledger API",
+      "description": "A map of core endpoints; the full contract lives in the monorepo OpenAPI specification.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "apps/api/src/modules/shadow-ledger/api/anchor-batches.controller.ts",
+        "packages/contracts/src/shadow-ledger.ts",
+        "docs/api/openapi.yaml"
+      ],
+      "sections": [
+        {
+          "id": "conventions",
+          "title": "Integration conventions",
+          "paragraphs": [
+            "The API prefix is /api/v1. Private endpoints require authentication, with organization scope determined from the session rather than a client-supplied orgId.",
+            "Use Idempotency-Key for supported operations. Reusing a key with a different body yields IDEMPOTENCY_KEY_REUSE; matching requests replay their stored result. Zod and OpenAPI define authoritative bodies, responses, and errors."
+          ]
+        },
+        {
+          "id": "endpoints",
+          "title": "Core endpoints",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Method / path after /api/v1",
+              "Purpose"
+            ],
+            "rows": [
+              [
+                "POST /shadow-ledger/ingest",
+                "Multipart: JSON file, plantId, recordType."
+              ],
+              [
+                "POST /shadow-ledger/commit-offchain",
+                "Confirm recordIds, append seal and log."
+              ],
+              [
+                "GET /shadow-ledger/records/:id/evidence",
+                "Download plant-authorized evidence."
+              ],
+              [
+                "POST /shadow-ledger/records/:id/verify",
+                "Request re-verification."
+              ],
+              [
+                "GET /shadow-ledger/anchor-plan",
+                "Inspect eligible records."
+              ],
+              [
+                "POST /shadow-ledger/anchor-batches",
+                "Create a batch (IssuerAdmin)."
+              ],
+              [
+                "POST /shadow-ledger/anchor-batches/:id/signature",
+                "Submit signature; 202 Accepted."
+              ],
+              [
+                "GET /public/verifier-keys",
+                "Public keys and trust metadata."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "async",
+          "title": "Asynchronous operations",
+          "paragraphs": [
+            "202 Accepted means the request was accepted, not that its transaction is finalized. Observe batch and record states before reporting a successful anchor.",
+            "This map is an endpoint guide rather than a full API reference. Do not infer signing payloads, authentication headers, or responses from endpoint names."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "smart-contracts",
+      "group": "reference",
+      "title": "Smart contracts & versions",
+      "description": "Contract roles, commitBatch, markVerified, and ledger compatibility.",
+      "sources": [
+        "contracts/src/ShadowLedger.sol",
+        "contracts/src/ShadowLedgerV3.sol",
+        "docs/adr/ADR-0034-independent-commits-provisional-months-ledger-v3.md"
+      ],
+      "sections": [
+        {
+          "id": "roles",
+          "title": "Separate on-chain responsibilities",
+          "paragraphs": [
+            "The contract uses AccessControl and ERC-2771. Issuer wallets are bound to orgRef; a relayer funds the transaction while valid forwarded calls retain issuer identity.",
+            "ISSUER_ROLE commits records; VERIFIER_ROLE records verification; CHECKPOINT_ROLE writes checkpoints. The admin manages roles and configuration. These roles are not API read permissions."
+          ]
+        },
+        {
+          "id": "writes",
+          "title": "Core writes",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Function",
+              "Purpose"
+            ],
+            "rows": [
+              [
+                "commitBatch",
+                "Commit recordRoot identities subject to contract limits."
+              ],
+              [
+                "markVerified",
+                "Bind commitmentId, recordRoot, and receiptHash."
+              ],
+              [
+                "checkpoint",
+                "Anchor the Merkle root of organization log heads."
+              ],
+              [
+                "registerIssuerWallet",
+                "Bind a wallet to orgRef and grant issuer authority."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "compatibility",
+          "title": "Check the right address and version",
+          "paragraphs": [
+            "Bundle v1 corresponds to ledger v2; current bundle v2 code supports ledger v3. v3 exposes periodAnchorCount and sequences for month-slot history.",
+            "Do not trust a ledger address merely because a bundle declares it. Independently confirm chainId, address, and deployment block; these docs do not assert a live v3 address."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "architecture",
+      "group": "reference",
+      "title": "System architecture",
+      "description": "The monorepo components responsible for data, evidence, and transactions.",
+      "sources": [
+        "docs/architecture/03-system-architecture.md",
+        "docs/architecture/06-event-flow.md",
+        "apps/api/src/modules/shadow-ledger",
+        "packages/hashing/src",
+        "packages/verifier/src"
+      ],
+      "sections": [
+        {
+          "id": "components",
+          "title": "From source to ledger",
+          "paragraphs": [
+            "The issuer dashboard is the operating interface. The NestJS API coordinates ingestion and access; workers handle fetching, verification, relaying, indexing, and monitoring. PostgreSQL stores state and logs; source/documents are encrypted.",
+            "packages/hashing defines bytes and hashes. packages/verifier independently reproduces evidence. packages/contracts defines Zod/API contracts; packages/ingest contains pure parsers and mapping, with endpoint availability documented separately."
+          ]
+        },
+        {
+          "id": "transactions",
+          "title": "Consistency during failure",
+          "paragraphs": [
+            "State, audit, and outbox entries are written in the same transaction. Consumers record inbox receipts atomically with their effects so replay does not lose or duplicate work.",
+            "Chain writes follow reserve → sign once → persist raw transaction and hash → broadcast → resend the same transaction. Replacements/cancellations keep the nonce; finalized receipts determine the outcome."
+          ]
+        },
+        {
+          "id": "boundaries",
+          "title": "Package boundaries",
+          "paragraphs": [
+            "Domain and pure engines do not depend on NestJS or the database. Applications wire adapters to use cases; packages never depend on an application.",
+            "Tests and CI use simulated adapters. Deployment and Base Sepolia smoke verification are separate gates; builds and tests do not prove the live environment has the intended configuration."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "scope-and-roadmap",
+      "group": "resources",
+      "title": "Scope & roadmap",
+      "description": "Separate implemented flows, cutover-dependent capabilities, and future work.",
+      "sources": [
+        "docs/adr/ADR-0031-ucyield-verified-v2.md",
+        "docs/adr/ADR-0034-independent-commits-provisional-months-ledger-v3.md",
+        "docs/tasks/PLAN-independent-commits-v3-2026-10-02.md",
+        "docs/architecture/08-legal-compliance-gate.md"
+      ],
+      "sections": [
+        {
+          "id": "phase1",
+          "title": "Phase 1 · Base Sepolia",
+          "paragraphs": [
+            "The product focuses on operating records, cryptographic identity, verification, and permissioned selective disclosure. Phase 1 uses Base Sepolia, chainId 84532.",
+            "These guides were checked against the source checkout on 4 October 2026. No live smoke test or secret/deployment configuration inspection was performed for this documentation design."
+          ]
+        },
+        {
+          "id": "availability",
+          "title": "Availability matrix",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Capability",
+              "Evidence / condition"
+            ],
+            "rows": [
+              [
+                "JSON ingest, Huawei API-account fetch",
+                "Core source paths exist; live operation not tested."
+              ],
+              [
+                "UCYield Verified + CLI",
+                "Engine and CLI exist; an independent trust store is required."
+              ],
+              [
+                "Independent commits, provisional periods, month sequences",
+                "v3 code exists; deployment/configuration/cutover must be confirmed."
+              ],
+              [
+                "CSV/XLSX, full source slicing/replay",
+                "Library / plan exists; inspected ingest endpoint does not accept them."
+              ],
+              [
+                "Native Provider API, Huawei OAuth",
+                "Separate plans; not presented as verified live flows."
+              ],
+              [
+                "Mainnet, payments, distributions",
+                "Outside Phase 1 and subject to approval gates."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "future",
+          "title": "Further gates",
+          "paragraphs": [
+            "A mainnet pilot depends on LegalReadinessGate and owner approval. Issuance, payments, distributions, and funding rounds cannot be inferred from data anchoring.",
+            "Update documentation when APIs change, ledger cutovers complete, or integrations pass deployment verification. A roadmap is not a launch confirmation."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "glossary",
+      "group": "resources",
+      "title": "Glossary",
+      "description": "Terms used throughout records, evidence, and Shadow Ledger.",
+      "sources": [
+        "docs/specs/ucy-hash-v2.md",
+        "packages/verifier/src/schemas.ts",
+        "docs/adr/ADR-0034-independent-commits-provisional-months-ledger-v3.md"
+      ],
+      "sections": [
+        {
+          "id": "data",
+          "title": "Data and identity",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Term",
+              "Meaning"
+            ],
+            "rows": [
+              [
+                "Plant",
+                "Operating plant / asset with a timezone and access scope."
+              ],
+              [
+                "Period",
+                "Calendar month YYYY-MM in the plant timezone."
+              ],
+              [
+                "Metric registry",
+                "Metric definitions, units, precision, and bounds."
+              ],
+              [
+                "Canonicalization",
+                "Representing data as bytes under fixed rules."
+              ],
+              [
+                "recordRoot",
+                "Hash binding the header and the periods Merkle root."
+              ],
+              [
+                "Salt",
+                "Random bytes incorporated into value-protecting identities."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "evidence",
+          "title": "Evidence and verification",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Term",
+              "Meaning"
+            ],
+            "rows": [
+              [
+                "Seal",
+                "Signature binding recordRoot to commit time and log context."
+              ],
+              [
+                "Receipt",
+                "Signed verifier result; only passing results are signed."
+              ],
+              [
+                "Evidence bundle",
+                "Data package for independent verification."
+              ],
+              [
+                "Trust store",
+                "Independently obtained trusted keys, windows, and anchors."
+              ],
+              [
+                "Checkpoint",
+                "On-chain Merkle root of organization log heads."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "chain",
+          "title": "Anchoring and month history",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Term",
+              "Meaning"
+            ],
+            "rows": [
+              [
+                "Anchored",
+                "Finalized commitment receipt/events have been matched."
+              ],
+              [
+                "periodSlot · v3",
+                "Month identity by organization, plant, and record type."
+              ],
+              [
+                "anchorSequence · v3",
+                "Slot anchor sequence, starting at 1."
+              ],
+              [
+                "Provisional · v3",
+                "Contains the ingestion-time current month; stays off-chain."
+              ],
+              [
+                "Restated · v3",
+                "Month values differ from the prior baseline; an informational label."
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

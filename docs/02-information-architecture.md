@@ -1,6 +1,6 @@
 # 02 — Information Architecture
 
-## 2.1 Sitemap (1 page duy nhất, one-pager + anchor)
+## 2.1 Sitemap (landing + documentation)
 
 ```text
 /            (tiếng Việt, mặc định)
@@ -14,8 +14,9 @@
 /en          (tiếng Anh, mirror toàn bộ anchor trên)
 ```
 
-Không có route con phase 1 (no `/blog`, `/pricing`, `/docs` nội bộ — docs link ra ngoài).
-`robots.txt` cho index `/`, sitemap 1 URL + alternate `vi/en`.
+Theo yêu cầu owner ngày 04/10/2026, bổ sung `/docs` và `/en/docs` với 16 bài viết song ngữ.
+Thiết kế, phạm vi nguồn và routes: [12 — Documentation](12-documentation-design.md).
+`robots.txt` cho index landing và docs; sitemap có alternate `vi/en`.
 
 ## 2.2 Header (sticky, blur khi scroll)
 

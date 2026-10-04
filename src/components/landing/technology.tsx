@@ -4,6 +4,7 @@ import { CodeWindow } from './code-window';
 import { Reveal } from '../motion/reveal';
 import { ArchitectureStrip } from './architecture-strip';
 import { SectionHeading } from './section-heading';
+import { Link } from '@/i18n/routing';
 
 export function Technology({ dict }: { dict: any }) {
   return (
@@ -55,7 +56,10 @@ export function Technology({ dict }: { dict: any }) {
           </Reveal>
           
           <Reveal delay={0.4}>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
+              <Link href="/docs" className={buttonVariants({ variant: 'outline', className: 'rounded-full border-[#2A3F68] text-[#DCE6FF] hover:bg-white/5' })}>
+                {dict.readDocs}
+              </Link>
               <a 
                 href="https://sepolia.basescan.org/address/0x0DC94FAe3DD2D9852d63C996976cbb80B2F4FDD7" 
                 target="_blank" 

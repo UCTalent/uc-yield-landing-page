@@ -1,0 +1,913 @@
+{
+  "groups": [
+    {
+      "id": "start",
+      "title": "Bắt đầu"
+    },
+    {
+      "id": "concepts",
+      "title": "Khái niệm cốt lõi"
+    },
+    {
+      "id": "guides",
+      "title": "Hướng dẫn issuer"
+    },
+    {
+      "id": "verify",
+      "title": "Kiểm chứng dữ liệu"
+    },
+    {
+      "id": "reference",
+      "title": "Tham chiếu kỹ thuật"
+    },
+    {
+      "id": "resources",
+      "title": "Tài nguyên"
+    }
+  ],
+  "pages": [
+    {
+      "slug": "introduction",
+      "group": "start",
+      "title": "UCYield là gì?",
+      "description": "Hiểu hạ tầng dữ liệu real-yield, người dùng và giá trị của Shadow Ledger.",
+      "sources": [
+        "docs/prd/UCYield_Phase1_Base_Funding.md",
+        "docs/adr/ADR-0022-consolidate-shadow-ledger-into-monorepo.md",
+        "docs/adr/ADR-0031-ucyield-verified-v2.md"
+      ],
+      "sections": [
+        {
+          "id": "purpose",
+          "title": "Một lịch sử có thể kiểm chứng",
+          "paragraphs": [
+            "UCYield giúp doanh nghiệp ghi nhận dữ liệu vận hành thành các bản ghi có thể kiểm chứng. Một bản ghi có định danh mật mã; người được cấp quyền có thể tải bằng chứng và tính lại kết quả.",
+            "Shadow Ledger đưa định danh đó lên Base Sepolia để tạo thêm một điểm đối chiếu công khai. Số liệu vận hành vẫn được lưu và mã hóa ngoài chuỗi."
+          ]
+        },
+        {
+          "id": "audience",
+          "title": "Ai sử dụng UCYield?",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Người dùng",
+              "Công việc"
+            ],
+            "rows": [
+              [
+                "Issuer",
+                "Ghi nhận số liệu, quản lý nhà máy và lịch sử bản ghi."
+              ],
+              [
+                "Viewer được mời",
+                "Đọc và kiểm chứng số liệu của nhà máy được cấp quyền."
+              ],
+              [
+                "Đối tác kỹ thuật / kiểm toán",
+                "Tái tạo kết quả bằng engine và CLI độc lập."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "scope",
+          "title": "Phạm vi hiện tại",
+          "paragraphs": [
+            "Phase 1 tập trung vào hạ tầng dữ liệu trên Base Sepolia. UCYield Verified kiểm tra tính toàn vẹn và khả năng tái tạo bằng chứng; nó không chứng minh nhà máy đã báo cáo đúng số liệu thực tế.",
+            "Các mô-đun phát hành RWA/B20 cũ được giữ để tham khảo và đã đóng băng. Mainnet, thanh toán, phân phối lợi nhuận và các vòng huy động vốn thuộc phạm vi có cổng phê duyệt riêng."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "quickstart",
+      "group": "start",
+      "title": "Bản ghi đầu tiên",
+      "description": "Đi từ một file dữ liệu đến bản ghi đã xác minh và bằng chứng có thể tải về.",
+      "sources": [
+        "apps/issuer-dashboard/src/app/dashboard/data/commit/page.tsx",
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "apps/api/src/modules/shadow-ledger/api/anchor-batches.controller.ts"
+      ],
+      "sections": [
+        {
+          "id": "prepare",
+          "title": "Chuẩn bị trước khi bắt đầu",
+          "paragraphs": [
+            "Bạn cần phiên đăng nhập issuer, tổ chức đang hoạt động và quyền ghi vào nhà máy đã đăng ký. Chuẩn bị dữ liệu theo tháng và kiểm tra múi giờ của nhà máy.",
+            "Bắt đầu với một tháng đã kết thúc. File JSON dùng schemaVersion 2.0.0, plantCode khớp nhà máy và các metric đã đăng ký. Chọn loại bản ghi trên dashboard."
+          ]
+        },
+        {
+          "id": "workflow",
+          "title": "Thực hiện theo từng bước",
+          "paragraphs": [],
+          "list": [
+            "Chọn nhà máy, loại bản ghi và tải file JSON.",
+            "Xem lại các tháng, metric và lỗi định dạng; xác nhận lưu bản ghi.",
+            "Chờ xác minh off-chain hoàn tất.",
+            "Nếu đủ điều kiện và hạn mức, IssuerAdmin xác nhận neo lên Base qua ví nhúng CDP. Nền tảng chi trả phí giao dịch.",
+            "Chờ giao dịch đạt finalized; mở chi tiết và tải gói bằng chứng."
+          ]
+        },
+        {
+          "id": "check",
+          "title": "Kiểm tra kết quả",
+          "paragraphs": [
+            "Đọc riêng trạng thái lưu bản ghi, xác minh, neo và toàn vẹn. Một bản ghi được lưu nội bộ có thể đã Verified mà chưa Anchored.",
+            "Tải bằng chứng và mở trình kiểm chứng tại issuer dashboard /verify. Đối chiếu chain cần chạy CLI với RPC và địa chỉ ledger đã xác nhận độc lập."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "shadow-ledger",
+      "group": "concepts",
+      "title": "Shadow Ledger",
+      "description": "Phân biệt dữ liệu lưu nội bộ, định danh recordRoot và bằng chứng neo trên Base.",
+      "sources": [
+        "docs/specs/ucy-hash-v2.md",
+        "contracts/src/ShadowLedger.sol",
+        "contracts/src/ShadowLedgerV3.sol"
+      ],
+      "sections": [
+        {
+          "id": "identity",
+          "title": "Một định danh cho cả bản ghi",
+          "paragraphs": [
+            "recordRoot ràng buộc header và toàn bộ kỳ dữ liệu của bản ghi. Header chứa thông tin nguồn, nhà máy, múi giờ và registryHash; mỗi kỳ có salt riêng.",
+            "Cùng document và salts cho cùng recordRoot. Hai lần ingest độc lập có thể có cùng số liệu nhưng root khác vì salts và metadata khác."
+          ]
+        },
+        {
+          "id": "layers",
+          "title": "Hai lớp lưu trữ",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Lớp",
+              "Nội dung"
+            ],
+            "rows": [
+              [
+                "Off-chain",
+                "Document, nguồn, salts, snapshot registry, seal và nhật ký."
+              ],
+              [
+                "On-chain",
+                "recordRoot, tham chiếu mù, metadata và bằng chứng giao dịch."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "versions",
+          "title": "Ledger v2 và v3",
+          "paragraphs": [
+            "v2 có khóa theo kỳ và luồng revision. v3 cho phép bản ghi độc lập chồng tháng; contract tự tính periodSlot theo tổ chức, nhà máy, loại bản ghi và tháng, rồi tăng sequence mỗi lần neo.",
+            "Bản ghi lịch sử phải được kiểm chứng theo đúng phiên bản ledger và bundle. Có code v3 không đồng nghĩa môi trường đang dùng v3; cần kiểm cấu hình và bằng chứng triển khai trước khi áp dụng hướng dẫn v3."
+          ]
+        }
+      ],
+      "notice": "Có mã nguồn v2 và v3. Trạng thái triển khai live của v3 chưa được xác nhận trong đợt khảo sát này."
+    },
+    {
+      "slug": "record-lifecycle",
+      "group": "concepts",
+      "title": "Vòng đời bản ghi",
+      "description": "Đọc đúng các trạng thái Committed, Verified, Anchored và Integrity.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/domain/record-verification-state.ts",
+        "apps/api/src/modules/shadow-ledger/domain/record-anchor-state.ts",
+        "docs/adr/ADR-0036-verification-retry-exhaustion.md"
+      ],
+      "sections": [
+        {
+          "id": "axes",
+          "title": "Bốn trạng thái độc lập",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Trục",
+              "Ý nghĩa"
+            ],
+            "rows": [
+              [
+                "Pending → Committed",
+                "Xác nhận bản ghi, tạo seal và nối nhật ký."
+              ],
+              [
+                "Pending / Queued / Verifying / Verified / Failed",
+                "Tiến trình và kết quả của yêu cầu xác minh."
+              ],
+              [
+                "OffChain → Anchored",
+                "Đã đối chiếu đầy đủ receipt và event finalized."
+              ],
+              [
+                "Ok → Broken",
+                "Giám sát phát hiện bằng chứng mâu thuẫn."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "finality",
+          "title": "Chờ xác nhận cuối cùng",
+          "paragraphs": [
+            "Gửi giao dịch thành công chưa có nghĩa bản ghi đã Anchored. Hệ thống cần receipt thành công và các event khớp tại block finalized.",
+            "Khi neo xong, hệ thống chạy lại xác minh với bằng chứng chain. Kết quả off-chain trước đó và kết quả on-chain là hai bước riêng."
+          ]
+        },
+        {
+          "id": "recovery",
+          "title": "Lỗi hạ tầng và dữ liệu sai",
+          "paragraphs": [
+            "RPC, storage hoặc cấu hình trust store không khả dụng không đồng nghĩa bằng chứng sai. Yêu cầu giữ Queued với mã hạ tầng để phục hồi.",
+            "Khi hết lượt tự động, giao diện cần thể hiện đã dừng thử lại. Sau khi phụ thuộc hoạt động trở lại, dùng Xác minh lại để tạo yêu cầu mới. Mâu thuẫn mật mã thực sự mới cho kết quả Failed."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "privacy",
+      "group": "concepts",
+      "title": "Quyền riêng tư & truy cập",
+      "description": "Hiểu dữ liệu công khai trên chain và dữ liệu vận hành chỉ người có quyền đọc được.",
+      "sources": [
+        "docs/adr/ADR-0031-ucyield-verified-v2.md",
+        "apps/api/src/modules/organizations/plant-access.service.ts",
+        "apps/api/src/modules/shadow-ledger/application/record-l2-reader.service.ts"
+      ],
+      "sections": [
+        {
+          "id": "public",
+          "title": "Những gì công khai",
+          "paragraphs": [
+            "Hash, metadata và giao dịch trên EVM có thể quan sát công khai. Không đặt số liệu vận hành, tên người hay credential vào calldata.",
+            "Salt của mỗi kỳ và các tham chiếu mù giảm khả năng đoán giá trị từ root. Điều này không che giấu mọi metadata hay quan hệ giữa các lần neo."
+          ]
+        },
+        {
+          "id": "private",
+          "title": "Số liệu chỉ mở theo quyền",
+          "paragraphs": [
+            "Document và dữ liệu nguồn được mã hóa off-chain. API kiểm tổ chức, phiên thành viên và phạm vi nhà máy trước khi cho đọc số liệu hoặc tải bằng chứng.",
+            "Viewer được mời chỉ xem nhà máy được cấp quyền. Biết recordId hoặc xem được transaction công khai không cấp quyền đọc dữ liệu riêng."
+          ]
+        },
+        {
+          "id": "sharing",
+          "title": "Chia sẻ gói bằng chứng",
+          "paragraphs": [
+            "Gói bằng chứng có thể chứa số liệu, salts và nguồn cần để tính lại root. Người nhận file có thể đọc dữ liệu trong file đó.",
+            "Chỉ chia sẻ gói cho bên được phép nhận số liệu. Thu hồi quyền API không thu hồi được một file đã tải về."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "upload-data",
+      "group": "guides",
+      "title": "Tải dữ liệu lên",
+      "description": "Chuẩn bị JSON đúng nhà máy, kỳ dữ liệu và registry metric.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "packages/hashing/src/schema-v2.ts",
+        "docs/specs/ucy-hash-v2.md"
+      ],
+      "sections": [
+        {
+          "id": "format",
+          "title": "Định dạng file hiện được nhận",
+          "paragraphs": [
+            "Endpoint ingest hiện nhận file .json tối đa 1.000.000 byte. Chọn plantId và recordType trên dashboard; không tự thêm header hoặc salts vào file upload.",
+            "Ví dụ dưới dùng nhà máy minh họa. Thay plantCode bằng mã nhà máy thực và chỉ sử dụng metric thuộc registry của loại tài sản đó."
+          ],
+          "code": "{\n  \"schemaVersion\": \"2.0.0\",\n  \"plantCode\": \"SOLAR-DEMO-01\",\n  \"periods\": [\n    {\n      \"period\": \"2026-08\",\n      \"metrics\": {\n        \"inverter_yield_kwh\": \"24000\",\n        \"ongrid_export_kwh\": \"22000\"\n      }\n    }\n  ]\n}",
+          "language": "JSON"
+        },
+        {
+          "id": "validation",
+          "title": "Những quy tắc cần kiểm tra",
+          "paragraphs": [],
+          "list": [
+            "period ở dạng YYYY-MM, 1–12 kỳ mỗi bản ghi, không trùng kỳ trong cùng file.",
+            "Giá trị metric nên là chuỗi decimal, dùng dấu chấm; không số mũ hay dấu phân cách hàng nghìn.",
+            "Key metric phải thuộc registry, đúng số chữ số thập phân và khoảng giá trị.",
+            "Không có key JSON trùng nhau; không tự thêm trường ngoài schema."
+          ]
+        },
+        {
+          "id": "provisional",
+          "title": "Tháng hiện tại và Tạm tính",
+          "paragraphs": [
+            "Ở chế độ ledger v3, một bản ghi chứa tháng hiện tại tại thời điểm ingest là Tạm tính. Bản ghi đó có thể lưu và xác minh off-chain nhưng không được neo.",
+            "Tính chất Tạm tính được khóa bởi ingestedAt và timezone. Khi tháng đóng, ingest lại để tạo bản ghi mới; chờ sang tháng không tự biến bản ghi cũ thành số cuối kỳ."
+          ]
+        }
+      ],
+      "notice": "CSV/XLSX và preview có mã thư viện / kế hoạch, nhưng endpoint ingest đang đọc chỉ nhận JSON. Không xem chúng là định dạng upload đã hỗ trợ trên dashboard."
+    },
+    {
+      "slug": "provider-ingestion",
+      "group": "guides",
+      "title": "Kết nối nguồn dữ liệu",
+      "description": "Luồng Huawei FusionSolar, binding nhà máy và các trạng thái fetch.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "apps/api/src/modules/shadow-ledger/application/fetch-executor.service.ts",
+        "docs/shadow-ledger/08-dual-ingestion-runbook.md",
+        "docs/adr/ADR-0035-canonical-ingestion-formats-and-provider-contract.md"
+      ],
+      "sections": [
+        {
+          "id": "connection",
+          "title": "Kết nối và gắn nhà máy",
+          "paragraphs": [
+            "Luồng provider dùng credential được quản lý tại server. Kiểm tra kết nối, chọn mapping template phù hợp và bind mã trạm provider với nhà máy trong tổ chức.",
+            "Không đưa mật khẩu, token hoặc nội dung response nhạy cảm vào tài liệu công khai. Quyền truy cập provider và quyền đọc dữ liệu UCYield là hai phạm vi khác nhau."
+          ]
+        },
+        {
+          "id": "fetch",
+          "title": "Lấy dữ liệu theo tháng",
+          "paragraphs": [
+            "Có thể khởi tạo fetch theo quyền hoặc cấu hình lịch. Worker lấy nguồn, ánh xạ metric, chuẩn hóa số và tạo bản ghi; luồng fetch hiện có đường tự commit off-chain.",
+            "Một response rỗng hoặc tháng chưa có số liệu không được điền thành 0. Đọc kết quả fetch để phân biệt không có dữ liệu, lỗi xác thực, giới hạn provider và lỗi schema."
+          ]
+        },
+        {
+          "id": "coverage",
+          "title": "Giới hạn tích hợp",
+          "paragraphs": [
+            "Provider API native, source slice/replay đầy đủ và Huawei OAuth có đặc tả và kế hoạch riêng. Chỉ công bố như tính năng sử dụng được khi endpoint và luồng giao diện đã được xác minh.",
+            "Trong đợt khảo sát này, JSON upload và đường fetch Huawei dùng tài khoản API là hai đường lõi đã đọc trong code. Tài liệu này không xác nhận provider live hay credential của môi trường."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "team-access",
+      "group": "guides",
+      "title": "Thành viên & quyền nhà máy",
+      "description": "Cấp quyền phù hợp cho admin, operator và viewer được mời.",
+      "sources": [
+        "apps/api/src/modules/organizations/plant-access.service.ts",
+        "apps/api/src/modules/shadow-ledger/api/anchor-batches.controller.ts"
+      ],
+      "sections": [
+        {
+          "id": "roles",
+          "title": "Vai trò ứng dụng",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Vai trò",
+              "Phạm vi"
+            ],
+            "rows": [
+              [
+                "IssuerAdmin",
+                "Quản trị tổ chức; xác nhận batch neo theo điều kiện."
+              ],
+              [
+                "IssuerOperator",
+                "Ghi dữ liệu ở nhà máy có quyền write."
+              ],
+              [
+                "IssuerViewer",
+                "Đọc dữ liệu và bằng chứng ở nhà máy được cấp quyền."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "plant-scope",
+          "title": "Quyền gắn với nhà máy",
+          "paragraphs": [
+            "Thành viên không mặc nhiên đọc toàn bộ dữ liệu của mọi tổ chức. Phiên đang hoạt động xác định tổ chức; quyền nhà máy xác định dữ liệu được đọc hoặc ghi.",
+            "Khi tổ chức hoặc nhà máy thay đổi trạng thái, thao tác có thể bị từ chối dù giao diện trước đó còn hiển thị nút. Server kiểm quyền lại ở lúc thực hiện."
+          ]
+        },
+        {
+          "id": "viewer",
+          "title": "Cấp quyền cho bên kiểm chứng",
+          "paragraphs": [
+            "Mời viewer vào đúng tổ chức và chỉ cấp các nhà máy cần xem. Viewer có thể tải gói bằng chứng trong phạm vi cho phép để kiểm tra độc lập.",
+            "Phân biệt role trên ứng dụng với role của contract. Không cần cấp quyền ký giao dịch issuer cho người chỉ đọc số liệu."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ucyield-verified",
+      "group": "verify",
+      "title": "UCYield Verified nghĩa là gì?",
+      "description": "Các kiểm tra có thể tái tạo, receipt đã ký và ranh giới của lời khẳng định Verified.",
+      "sources": [
+        "docs/adr/ADR-0031-ucyield-verified-v2.md",
+        "packages/verifier/src/verify-record.ts",
+        "docs/adr/ADR-0036-verification-retry-exhaustion.md"
+      ],
+      "sections": [
+        {
+          "id": "claim",
+          "title": "Ý nghĩa của kết quả",
+          "paragraphs": [
+            "UCYield Verified là kết quả tái tính và đối chiếu bằng chứng, với receipt ký bởi khóa verifier. Người có dữ liệu được phép nhận có thể chạy cùng engine để kiểm lại.",
+            "Kết quả bảo vệ tính toàn vẹn sau commit. Nó không chứng minh tính chính xác của đồng hồ đo, báo cáo doanh thu hay số liệu mà issuer hoặc provider cung cấp."
+          ]
+        },
+        {
+          "id": "checks",
+          "title": "Hai profile kiểm chứng",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Profile",
+              "Kiểm tra"
+            ],
+            "rows": [
+              [
+                "Off-chain · C1–C8",
+                "Parser/schema, canonical bytes, root, projection, nguồn/registry, định danh kỳ và seal/nhật ký."
+              ],
+              [
+                "On-chain · C1–C10",
+                "Thêm commitment finalized và binding ví issuer với tổ chức."
+              ],
+              [
+                "Receipt",
+                "Chữ ký, key tin cậy, nội dung bằng chứng và định danh record."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "limits",
+          "title": "Ranh giới tin cậy",
+          "paragraphs": [
+            "Lấy trust store từ nguồn độc lập với bundle. Bộ khóa được chính file bằng chứng tự khai không đủ làm cơ sở tin cậy.",
+            "Theo ADR-0031, đường sản phẩm hiện tại không đưa ra lời khẳng định Chainlink DON, OracleConsumer hay Nitro attestation. Những mô tả đó thuộc thiết kế cũ."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "independent-verification",
+      "group": "verify",
+      "title": "Tự kiểm chứng bằng chứng",
+      "description": "Tải bundle, chọn trust store độc lập và chạy trình duyệt hoặc CLI.",
+      "sources": [
+        "packages/verifier/src/cli.ts",
+        "packages/verifier/src/schemas.ts",
+        "apps/issuer-dashboard/src/hooks/use-public-evidence-verifier.ts"
+      ],
+      "sections": [
+        {
+          "id": "evidence",
+          "title": "Chuẩn bị bundle và trust store",
+          "paragraphs": [
+            "Tải gói bằng chứng từ trang chi tiết khi bạn có quyền đọc nhà máy. Bundle chứa document, nguồn, registry snapshot, seal, log và receipt; có thêm anchor khi đã neo.",
+            "Trust store phải lấy độc lập, ví dụ endpoint /api/v1/public/verifier-keys của API bạn tin cậy hoặc sự kiện ledger đã finalized. Địa chỉ ledger cần được xác nhận qua một kênh tin cậy riêng."
+          ]
+        },
+        {
+          "id": "run",
+          "title": "Trình duyệt hoặc CLI",
+          "paragraphs": [
+            "Trang /verify của issuer dashboard thực hiện kiểm tra bằng chứng trong trình duyệt. Đây là điểm bắt đầu cho đối tác được cấp dữ liệu.",
+            "Các lệnh dưới chạy từ checkout monorepo ucyield đã cài dependency. Package verifier hiện là workspace private; không giả định có gói npm công khai để cài toàn cục. Lệnh thứ hai có RPC và địa chỉ ledger phù hợp với bundle."
+          ],
+          "code": "pnpm --filter @ucyield/verifier ucy-verify \\\n  evidence.bundle.json --trust trust.json\n\npnpm --filter @ucyield/verifier ucy-verify \\\n  evidence.bundle.json --trust trust.json \\\n  --rpc \"$BASE_SEPOLIA_RPC_URL\" \\\n  --ledger \"$CONFIRMED_LEDGER_ADDRESS\" --json",
+          "language": "SHELL"
+        },
+        {
+          "id": "interpret",
+          "title": "Đọc kết quả",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Kết quả",
+              "Ý nghĩa"
+            ],
+            "rows": [
+              [
+                "0 · pass",
+                "Các kiểm tra trong profile và receipt đạt."
+              ],
+              [
+                "1 · fail",
+                "Có bằng chứng mâu thuẫn hoặc receipt không hợp lệ."
+              ],
+              [
+                "2 · unavailable",
+                "Thiếu dữ liệu hạ tầng / finality hoặc lỗi sử dụng CLI."
+              ],
+              [
+                "C9–C10 · skip",
+                "Không cung cấp RPC; không có kết luận đối chiếu chain."
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "slug": "hashing",
+      "group": "reference",
+      "title": "Canonicalization & hashing",
+      "description": "ucy-hash-v2: bytes chuẩn hóa, Merkle tree, salts và recordRoot.",
+      "sources": [
+        "packages/hashing/src/canonicalize.ts",
+        "packages/hashing/src/hash-v2.ts",
+        "docs/specs/ucy-hash-v2.md"
+      ],
+      "sections": [
+        {
+          "id": "canonical",
+          "title": "Từ giá trị đến bytes xác định",
+          "paragraphs": [
+            "Canonical JSON dùng UTF-8 compact, sắp key theo code point và chuẩn hóa Unicode NFC. Key trùng sau chuẩn hóa bị từ chối. Trường tùy chọn được bỏ key; không dùng null.",
+            "Metric là decimal string chuẩn, không qua phép toán float. Giá trị 370.10 được chuẩn hóa thành 370.1; số mũ và các trường ngoài schema bị từ chối."
+          ]
+        },
+        {
+          "id": "root",
+          "title": "Dựng định danh bản ghi",
+          "paragraphs": [
+            "Các hằng D_* tách miền hash; mỗi salt kỳ là 32 byte ngẫu nhiên. Công thức dưới là sơ đồ, không phải một hàm thay thế implementation.",
+            "periodCount được ABI encode là uint256. Merkle tree dùng OpenZeppelin StandardMerkleTree với kiểu bytes32 và quy tắc double-hash của thư viện, kể cả khi chỉ có một kỳ."
+          ],
+          "code": "headerHash  = keccak256(utf8(canonical(header)))\ndataHash_i  = keccak256(utf8(canonical({metrics, period})))\nleaf_i      = keccak256(abi.encode(D_period, headerHash, dataHash_i, salt_i))\nperiodsRoot = StandardMerkleTree.of([[leaf_i]], [\"bytes32\"]).root\nrecordRoot  = keccak256(abi.encode(D_record, headerHash, periodsRoot, periodCount))",
+          "language": "ucy-hash-v2"
+        },
+        {
+          "id": "reproducible",
+          "title": "Những thứ phải giữ để tái tạo",
+          "paragraphs": [
+            "Giữ đúng bytes document, nguồn, salts, registry snapshot và phiên bản thuật toán. File metric upload một mình không đủ tái tạo recordRoot vì header và salts được tạo trong ingest.",
+            "Snapshot registry tại thời điểm ingest cho phép kiểm chứng bản ghi cũ khi dictionary được mở rộng. Dùng golden vectors và engine của repo để kiểm tương thích."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "api",
+      "group": "reference",
+      "title": "API Shadow Ledger",
+      "description": "Bản đồ endpoint lõi; hợp đồng đầy đủ nằm trong OpenAPI của monorepo.",
+      "sources": [
+        "apps/api/src/modules/shadow-ledger/api/shadow-ledger.controller.ts",
+        "apps/api/src/modules/shadow-ledger/api/anchor-batches.controller.ts",
+        "packages/contracts/src/shadow-ledger.ts",
+        "docs/api/openapi.yaml"
+      ],
+      "sections": [
+        {
+          "id": "conventions",
+          "title": "Quy ước tích hợp",
+          "paragraphs": [
+            "Prefix API là /api/v1. Endpoint riêng yêu cầu phiên xác thực và tổ chức được xác định từ phiên, không lấy orgId do client tự gửi.",
+            "Dùng Idempotency-Key cho các thao tác được hỗ trợ. Cùng key với body khác trả IDEMPOTENCY_KEY_REUSE; kết quả được phát lại khi request trùng. Hợp đồng Zod và OpenAPI là nguồn chính thức cho body, response và lỗi."
+          ]
+        },
+        {
+          "id": "endpoints",
+          "title": "Endpoint thường dùng",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Method / path sau /api/v1",
+              "Mục đích"
+            ],
+            "rows": [
+              [
+                "POST /shadow-ledger/ingest",
+                "Multipart: file JSON, plantId, recordType."
+              ],
+              [
+                "POST /shadow-ledger/commit-offchain",
+                "Xác nhận recordIds, ghi seal và log."
+              ],
+              [
+                "GET /shadow-ledger/records/:id/evidence",
+                "Tải bằng chứng theo quyền nhà máy."
+              ],
+              [
+                "POST /shadow-ledger/records/:id/verify",
+                "Yêu cầu xác minh lại."
+              ],
+              [
+                "GET /shadow-ledger/anchor-plan",
+                "Xem record đủ điều kiện neo."
+              ],
+              [
+                "POST /shadow-ledger/anchor-batches",
+                "Tạo batch (IssuerAdmin)."
+              ],
+              [
+                "POST /shadow-ledger/anchor-batches/:id/signature",
+                "Gửi chữ ký; 202 Accepted."
+              ],
+              [
+                "GET /public/verifier-keys",
+                "Khóa công khai và trust metadata."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "async",
+          "title": "Thao tác bất đồng bộ",
+          "paragraphs": [
+            "202 Accepted là đã tiếp nhận yêu cầu, chưa phải giao dịch finalized. Theo dõi batch và trạng thái bản ghi trước khi thông báo neo thành công.",
+            "Bảng này là chỉ dẫn tìm endpoint, chưa thay thế API reference đầy đủ. Không tự suy đoán payload ký, các header xác thực hoặc response từ tên endpoint."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "smart-contracts",
+      "group": "reference",
+      "title": "Smart contracts & phiên bản",
+      "description": "Vai trò contract, commitBatch, markVerified và tương thích ledger.",
+      "sources": [
+        "contracts/src/ShadowLedger.sol",
+        "contracts/src/ShadowLedgerV3.sol",
+        "docs/adr/ADR-0034-independent-commits-provisional-months-ledger-v3.md"
+      ],
+      "sections": [
+        {
+          "id": "roles",
+          "title": "Tách trách nhiệm on-chain",
+          "paragraphs": [
+            "Contract dùng AccessControl và ERC-2771. Ví issuer được bind với orgRef; relayer chi trả giao dịch mà không thay đổi danh tính issuer trong lời gọi được forward hợp lệ.",
+            "ISSUER_ROLE ghi commitment; VERIFIER_ROLE ghi kết quả xác minh; CHECKPOINT_ROLE ghi checkpoint. Quyền admin quản lý cấu hình và role; không xem các role này như quyền đọc API."
+          ]
+        },
+        {
+          "id": "writes",
+          "title": "Các thao tác lõi",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Hàm",
+              "Vai trò"
+            ],
+            "rows": [
+              [
+                "commitBatch",
+                "Ghi các định danh recordRoot; giới hạn theo contract."
+              ],
+              [
+                "markVerified",
+                "Ràng buộc commitmentId, recordRoot và receiptHash."
+              ],
+              [
+                "checkpoint",
+                "Neo Merkle root của các head nhật ký tổ chức."
+              ],
+              [
+                "registerIssuerWallet",
+                "Bind ví với orgRef và cấp quyền issuer."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "compatibility",
+          "title": "Kiểm đúng địa chỉ và phiên bản",
+          "paragraphs": [
+            "Bundle v1 đi với ledger v2; bundle v2 trong code hiện tại hỗ trợ ledger v3. v3 có periodAnchorCount và sequence cho lịch sử cùng slot tháng.",
+            "Không dùng một địa chỉ ledger suy ra từ bundle làm trust anchor. Xác nhận chainId, địa chỉ và deployment block từ nguồn độc lập; docs này không tự nhận một địa chỉ v3 là đã live."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "architecture",
+      "group": "reference",
+      "title": "Kiến trúc hệ thống",
+      "description": "Các thành phần xử lý dữ liệu, bằng chứng và giao dịch trong monorepo.",
+      "sources": [
+        "docs/architecture/03-system-architecture.md",
+        "docs/architecture/06-event-flow.md",
+        "apps/api/src/modules/shadow-ledger",
+        "packages/hashing/src",
+        "packages/verifier/src"
+      ],
+      "sections": [
+        {
+          "id": "components",
+          "title": "Từ nguồn đến ledger",
+          "paragraphs": [
+            "Issuer dashboard là giao diện vận hành. NestJS API điều phối ingest và quyền truy cập; worker xử lý fetch, xác minh, relay, indexer và giám sát. PostgreSQL giữ trạng thái và log; dữ liệu nguồn/document lưu mã hóa.",
+            "packages/hashing định nghĩa bytes và hash. packages/verifier tái tạo bằng chứng độc lập. packages/contracts định nghĩa Zod/API; packages/ingest chứa các parser và mapping thuần, với độ phủ endpoint được công bố riêng."
+          ]
+        },
+        {
+          "id": "transactions",
+          "title": "Nhất quán khi có lỗi",
+          "paragraphs": [
+            "Trạng thái, audit và outbox được ghi cùng transaction. Consumer phải ghi inbox cùng transaction với tác động của nó để xử lý lại không gây mất hoặc nhân đôi hiệu ứng.",
+            "Ghi chain theo reserve → ký một lần → lưu raw tx và hash → broadcast → resend cùng tx. Replacement/cancel dùng cùng nonce; receipt finalized quyết định kết quả."
+          ]
+        },
+        {
+          "id": "boundaries",
+          "title": "Ranh giới package",
+          "paragraphs": [
+            "Domain và các engine thuần không phụ thuộc NestJS hay DB. App là nơi nối adapters với nghiệp vụ; không có package nào phụ thuộc app.",
+            "Tests/CI dùng simulated adapters. Việc triển khai và smoke Base Sepolia là cổng riêng; code đã build hoặc test không chứng minh hệ thống live đang dùng đúng cấu hình."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "scope-and-roadmap",
+      "group": "resources",
+      "title": "Phạm vi & lộ trình",
+      "description": "Phân biệt luồng hiện có, tính năng phụ thuộc cutover và hướng phát triển tiếp theo.",
+      "sources": [
+        "docs/adr/ADR-0031-ucyield-verified-v2.md",
+        "docs/adr/ADR-0034-independent-commits-provisional-months-ledger-v3.md",
+        "docs/tasks/PLAN-independent-commits-v3-2026-10-02.md",
+        "docs/architecture/08-legal-compliance-gate.md"
+      ],
+      "sections": [
+        {
+          "id": "phase1",
+          "title": "Phase 1 · Base Sepolia",
+          "paragraphs": [
+            "Sản phẩm tập trung ghi dữ liệu vận hành, tạo định danh mật mã, kiểm chứng và selective disclosure theo quyền. Môi trường blockchain Phase 1 là Base Sepolia, chainId 84532.",
+            "Các hướng dẫn tại đây được đối chiếu với checkout nguồn ngày 04/10/2026. Không có smoke live hoặc kiểm tra secret/config triển khai trong đợt thiết kế docs."
+          ]
+        },
+        {
+          "id": "availability",
+          "title": "Ma trận khả dụng",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Hạng mục",
+              "Bằng chứng / điều kiện"
+            ],
+            "rows": [
+              [
+                "JSON ingest, fetch Huawei tài khoản API",
+                "Luồng lõi hiện có trong code; live chưa kiểm."
+              ],
+              [
+                "UCYield Verified + CLI",
+                "Engine và CLI hiện có; trust store bắt buộc."
+              ],
+              [
+                "Commit độc lập, Tạm tính, sequence tháng",
+                "Có code v3; cần deploy/cấu hình/cutover được xác nhận."
+              ],
+              [
+                "CSV/XLSX, source slice/replay đầy đủ",
+                "Có thư viện / kế hoạch; không nhận tại endpoint ingest hiện đọc."
+              ],
+              [
+                "Provider API native, Huawei OAuth",
+                "Kế hoạch riêng; chưa công bố như luồng live đã xác minh."
+              ],
+              [
+                "Mainnet, payments, distributions",
+                "Ngoài Phase 1 và có cổng phê duyệt."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "future",
+          "title": "Những cổng tiếp theo",
+          "paragraphs": [
+            "Mainnet pilot phụ thuộc LegalReadinessGate và phê duyệt owner. Phát hành, thanh toán, phân phối và vòng huy động không được suy ra từ khả năng neo dữ liệu.",
+            "Documentation phải cập nhật khi API thay đổi, phiên bản ledger cutover hoặc một tích hợp vượt qua kiểm thử triển khai. Không dùng roadmap như xác nhận đã ra mắt."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "glossary",
+      "group": "resources",
+      "title": "Thuật ngữ",
+      "description": "Các từ dùng xuyên suốt dữ liệu, bằng chứng và Shadow Ledger.",
+      "sources": [
+        "docs/specs/ucy-hash-v2.md",
+        "packages/verifier/src/schemas.ts",
+        "docs/adr/ADR-0034-independent-commits-provisional-months-ledger-v3.md"
+      ],
+      "sections": [
+        {
+          "id": "data",
+          "title": "Dữ liệu và định danh",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Thuật ngữ",
+              "Ý nghĩa"
+            ],
+            "rows": [
+              [
+                "Plant",
+                "Nhà máy / tài sản vận hành, có timezone và phạm vi truy cập."
+              ],
+              [
+                "Period",
+                "Tháng lịch YYYY-MM theo timezone của plant."
+              ],
+              [
+                "Metric registry",
+                "Định nghĩa metric, đơn vị, độ chính xác và giới hạn."
+              ],
+              [
+                "Canonicalization",
+                "Biểu diễn dữ liệu thành bytes theo quy tắc cố định."
+              ],
+              [
+                "recordRoot",
+                "Hash ràng buộc header và Merkle root các kỳ."
+              ],
+              [
+                "Salt",
+                "Bytes ngẫu nhiên dùng trong định danh có bảo vệ giá trị."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "evidence",
+          "title": "Bằng chứng và kiểm chứng",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Thuật ngữ",
+              "Ý nghĩa"
+            ],
+            "rows": [
+              [
+                "Seal",
+                "Chữ ký ràng buộc recordRoot với thời điểm commit và nhật ký."
+              ],
+              [
+                "Receipt",
+                "Kết quả verifier đã ký; chỉ ký kết quả đạt."
+              ],
+              [
+                "Evidence bundle",
+                "Gói đủ dữ liệu để chạy kiểm chứng độc lập."
+              ],
+              [
+                "Trust store",
+                "Khóa/cửa sổ hiệu lực và anchor tin cậy, lấy độc lập."
+              ],
+              [
+                "Checkpoint",
+                "Merkle root của các head nhật ký được ghi on-chain."
+              ]
+            ]
+          }
+        },
+        {
+          "id": "chain",
+          "title": "Neo và lịch sử tháng",
+          "paragraphs": [],
+          "table": {
+            "headers": [
+              "Thuật ngữ",
+              "Ý nghĩa"
+            ],
+            "rows": [
+              [
+                "Anchored",
+                "Receipt/event của commitment đã được đối chiếu finalized."
+              ],
+              [
+                "periodSlot · v3",
+                "Định danh tháng theo org, plant và loại record."
+              ],
+              [
+                "anchorSequence · v3",
+                "Số thứ tự lần neo của slot tháng, bắt đầu từ 1."
+              ],
+              [
+                "Provisional · v3",
+                "Có tháng hiện tại lúc ingest; bản ghi chỉ lưu off-chain."
+              ],
+              [
+                "Restated · v3",
+                "Giá trị tháng khác baseline trước; là nhãn thông tin."
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

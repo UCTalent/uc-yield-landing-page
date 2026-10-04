@@ -69,7 +69,7 @@ Toàn bộ tài liệu cho Designer (làm cơ sở dựng Figma) nằm trong th�
 
 ## 💻 Hướng Dẫn Chạy Local
 
-Yêu cầu: **Node.js 20+** & **pnpm 11+**
+Yêu cầu: **Node.js 22.6+** & **pnpm 11+**
 
 ```bash
 # Cài đặt dependencies
@@ -93,3 +93,19 @@ Mở [http://localhost:3000](http://localhost:3000) để xem ứng dụng.
 <div align="center">
   <i>Coded with 🩵 by UC Yield Team</i>
 </div>
+
+## Documentation
+
+Documentation chạy cùng website tại `/docs` (VI) và `/en/docs` (EN), gồm 16 bài trong 6 nhóm.
+Thiết kế và nghiên cứu nguồn UCYield: [docs/12-documentation-design.md](docs/12-documentation-design.md).
+Nội dung bài: `messages/docs/{vi,en}.json`; copy UI: namespace `Docs` trong `messages/{vi,en}.json`.
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+Search/sidebar/sitemap lấy từ catalog; khi thêm bài, giữ slug và section IDs giống nhau giữa VI/EN.
+Bài mới cần nguồn đối chiếu và phân biệt có code với đã xác nhận triển khai live.

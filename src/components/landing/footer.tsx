@@ -31,9 +31,9 @@ export function Footer({ dict, hDict }: { dict: any; hDict: any }) {
           <div>
             <h4 className="text-white font-bold mb-6">{dict.col2}</h4>
             <ul className="flex flex-col gap-3 text-sm text-mist">
-              <li><Link href="#" className={linkClass}>{dict.col2Item1}</Link></li>
-              <li><Link href="#" className={linkClass}>{dict.col2Item2}</Link></li>
-              <li><Link href="#" className={linkClass}>{dict.col2Item3}</Link></li>
+              <li><Link href="/docs/smart-contracts" className={linkClass}>{dict.col2Item1}</Link></li>
+              <li><Link href="/docs" className={linkClass}>{dict.col2Item2}</Link></li>
+              <li><Link href="/docs/hashing" className={linkClass}>{dict.col2Item3}</Link></li>
               <li className="mt-2 flex items-center"><span className="inline-block w-1.5 h-1.5 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E] mr-2 animate-pulse"></span><span className="text-white">{dict.status}</span></li>
             </ul>
           </div>

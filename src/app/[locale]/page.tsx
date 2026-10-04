@@ -31,7 +31,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
   return (
     <main className="min-h-screen bg-abyss text-ice font-sans relative">
       <HeroBackground />
-      <Header locale={locale} dict={{ howItWorks: h('howItWorks'), features: h('features'), technology: h('technology'), pilot: h('pilot'), faq: h('faq'), tryItNow: h('tryItNow') }} />
+      <Header locale={locale} dict={{ howItWorks: h('howItWorks'), features: h('features'), technology: h('technology'), pilot: h('pilot'), faq: h('faq'), documentation: h('documentation'), tryItNow: h('tryItNow') }} />
       <Hero dict={{ badgeLive: hero('badgeLive'), badgeVersion: hero('badgeVersion'), h1Line1: hero('h1Line1'), h1Highlight: hero('h1Highlight'), h1Line2: hero('h1Line2'), h1Line3: hero('h1Line3'), subtitle: hero('subtitle'), ctaTry: hero('ctaTry'), ctaHow: hero('ctaHow'), trust1: hero('trust1'), trust2: hero('trust2'), ledgerTitle: hero('ledgerTitle'), statsHashing: hero('statsHashing'), statsBytes: hero('statsBytes'), statsRoles: hero('statsRoles'), statsSteps: hero('statsSteps') }} />
       <TrustBar dict={{ items: tb('items') }} />
       <HowItWorks dict={{ title: hiw('title'), subtitle: hiw('subtitle'), step1Title: hiw('step1Title'), step1Desc: hiw('step1Desc'), step2Title: hiw('step2Title'), step2Desc: hiw('step2Desc'), step3Title: hiw('step3Title'), step3Desc: hiw('step3Desc') }} />
