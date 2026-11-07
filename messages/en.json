@@ -14,25 +14,25 @@
   },
   "Hero": {
     "badgeLive": "Live on Base Sepolia",
-    "badgeVersion": "Shadow Ledger v2",
+    "badgeVersion": "Shadow Ledger v3",
     "h1Line1": "Verifiable ",
     "h1Highlight": "real-yield",
     "h1Line2": "data infrastructure",
     "h1Line3": "on Base",
     "subtitle": "Issuers commit deterministic hashes of operating data on-chain. Raw data never touches the chain — anyone can re-verify.",
-    "ctaTry": "Try it now →",
+    "ctaTry": "Try it now",
     "ctaHow": "How it works ↓",
     "trust1": "Non-custodial",
     "trust2": "Deterministic hashing",
-    "trust3": "Verified on Basescan",
-    "statsHashing": "100% deterministic hashing",
-    "statsBytes": "0 raw bytes on-chain",
-    "statsRoles": "5 role-based access roles",
-    "statsSteps": "3 steps to commit",
-    "ledgerTitle": "Shadow Ledger — Live commitments"
+    "trust3": "Anyone can re-check",
+    "statsHashing": "deterministic hashing",
+    "statsBytes": "raw bytes on-chain",
+    "statsRoles": "on-chain roles (AccessControl)",
+    "statsSteps": "steps to commit",
+    "ledgerTitle": "Shadow Ledger — illustrative sample"
   },
   "TrustBar": {
-    "items": "BASE ✦ BASESCAN VERIFIED ✦ SHADOW LEDGER ✦ NON-CUSTODIAL ✦ DETERMINISTIC HASHING ✦ AES-GCM OFF-CHAIN ✦ CAS ENERGY PILOT ✦ ORACLE-VERIFIED BY CHAINLINK CRE ✦"
+    "items": "BASE ✦ BASE SEPOLIA ✦ SHADOW LEDGER V3 ✦ NON-CUSTODIAL ✦ DETERMINISTIC HASHING ✦ AES-GCM OFF-CHAIN ✦ CAS ENERGY PILOT ✦ INDEPENDENTLY RE-VERIFIABLE ✦"
   },
   "HowItWorks": {
     "eyebrow": "Workflow",
@@ -41,9 +41,9 @@
     "step1Title": "Upload & canonicalize",
     "step1Desc": "Metrics are canonicalized into deterministic bytes, hashed with keccak256 into a Merkle root.",
     "step2Title": "Sign & commit on-chain",
-    "step2Desc": "The issuer wallet (CDP/MetaMask) signs commitData, pays its own gas, receives the receipt.",
-    "step3Title": "Oracle verifies & seals",
-    "step3Desc": "Chainlink CRE oracle network verifies the commitment and seals the OracleVerified status on-chain."
+    "step2Desc": "The IssuerAdmin signs commitBatch with a CDP embedded wallet. The platform pays gas; UCYield servers never hold the private key.",
+    "step3Title": "Recompute & verify",
+    "step3Desc": "The UCYield verifier recomputes the root from the source data. On a match it writes markVerified on-chain with a signed receipt."
   },
   "Features": {
     "eyebrow": "Core Features",
@@ -57,17 +57,17 @@
     "f3Desc": "No private key ever touches our servers.",
     "f4Title": "Extensible without rewrites",
     "f4Desc": "New asset types need no core change — just a new schemaVersion.",
-    "banner": "Oracle Verification Network (Chainlink CRE) · Decentralized verification →"
+    "banner": "Phase 1: UCYield recomputes the root and signs the receipt. Anyone holding the evidence bundle can re-check the result."
   },
   "Technology": {
     "title": "Built with real primitives, open to verify",
     "purity": "Self-contained engine — no internal dependencies",
     "viewContract": "View contract ↗",
     "readDocs": "Read docs ↗",
-    "deployed": "Deployed:",
-    "verified": "Verified ✓",
-    "oracleBadge": "Oracle verification — live on testnet pilot",
-    "oracleFootnote": "Mainnet verification pending DON deployment."
+    "deployed": "ShadowLedgerV3:",
+    "verified": "View on Basescan ↗",
+    "oracleBadge": "Phase 1 · verifier operated by UCYield",
+    "oracleFootnote": "No Chainlink DON or TEE yet. Chainlink CRE is the Phase 2 direction and is not deployed."
   },
   "Pilot": {
     "chip": "Pilot — CAS Energy",
@@ -83,23 +83,23 @@
   "FAQ": {
     "title": "Frequently asked questions",
     "q1": "Is it on mainnet?",
-    "a1": "Not yet. Phase 1 runs on Base Sepolia. Mainnet requires the legal readiness gate.",
+    "a1": "Not yet. Phase 1 runs only on Base Sepolia (testnet). Mainnet comes only after the legal readiness gate is passed.",
     "q2": "Do you custody funds or keys?",
-    "a2": "No. You hold your own wallet (CDP/MetaMask) and sign locally.",
+    "a2": "No. Phase 1 takes no investor money, and UCYield servers never hold private keys. Issuers sign with their own CDP embedded wallet.",
     "q3": "Where is my raw data?",
     "a3": "Off-chain, AES-GCM encrypted. On-chain holds only hash, Merkle root and metadata.",
-    "q4": "How does oracle verification work?",
-    "a4": "The CRE workflow calls the on-chain OracleConsumer and seals the OracleVerified status. Currently running on testnet pilot via local simulator; mainnet will use full DON consensus.",
+    "q4": "What does \"Verified\" mean?",
+    "a4": "After a commit, the UCYield verifier recomputes the root from the source data under the same hashing spec. On a match it writes markVerified to ShadowLedgerV3 with the hash of a signed receipt. In Phase 1 the checker is UCYield itself; there is no Chainlink DON or TEE yet. Those are Phase 2.",
     "q5": "Who uses the issuer dashboard?",
     "a5": "Issuer teams: upload data, sign commits, browse commitment history.",
     "q6": "How do I verify independently?",
-    "a6": "Take the raw file + run the public hashing lib — compare the root with on-chain data on Basescan."
+    "a6": "Download the record's evidence bundle, recompute the root with the hashing spec in the docs (or the ucy-verify CLI), and compare it with the recordRoot stored on ShadowLedgerV3. You do not need to trust UCYield servers for this step."
   },
   "CTA": {
     "title": "Bring your yield data on-ledger.",
     "subtitle": "Free on testnet · No key custody · 3 minutes to your first commit.",
-    "subline": "Get OracleVerified on testnet in minutes.",
-    "btn": "Try it now — Open issuer dashboard →"
+    "subline": "Your first record reaches Verified within minutes on testnet.",
+    "btn": "Try it now — Open issuer dashboard"
   },
   "Footer": {
     "tagline": "Verifiable real-yield data infrastructure on Base.",
@@ -115,7 +115,7 @@
     "col3": "Legal & Contact",
     "col3Item1": "Phase 1 Sepolia-only",
     "col3Item2": "Gated pilot",
-    "bottom1": "© 2026 UC Yield",
+    "bottom1": "© 2026 UCYield · A product of UCTalent-Labs",
     "bottom2": "Commitment-first · Raw data never on-chain",
     "bottom3": "Back to top ↑",
     "footnote": "Phase 1 = Sepolia-only · Gated pilot · Mainnet requires legal readiness."
@@ -183,5 +183,57 @@
     "scopeCta": "View scope & roadmap",
     "metaTitle": "Documentation — UCYield",
     "metaDescription": "Issuer guides, Shadow Ledger, UCYield Verified, and independent evidence verification on Base Sepolia."
+  },
+  "Connect": {
+    "eyebrow": "Connect your plant",
+    "title": "Two ways in. The same checked record.",
+    "subtitle": "Huawei FusionSolar data can come in through the plant owner’s approval or through a technical API account. Either way it is reviewed, anchored on Base and verified.",
+    "ownerTitle": "The plant owner approves",
+    "ownerSub": "Sign in with Huawei · no password shared with UCYield",
+    "apiTitle": "The team uses an API account",
+    "apiSub": "Technical account from the plant’s Huawei system",
+    "owner1": "The issuer team adds a data source, picks Huawei FusionSolar and clicks “Connect Huawei with OAuth”. A Huawei window opens.",
+    "owner2": "On Huawei’s own page the plant owner signs in and clicks Allow. UCYield never sees the owner’s password.",
+    "owner3": "Back in UCYield: choose the plant and a closed month, check the sample, then click “Save & fetch data”.",
+    "owner4": "The fetched data waits for review. A reviewer checks the numbers and clicks “Anchor on Base”, signing with the issuer’s wallet.",
+    "owner5": "The record goes Anchoring, then Anchored on Base, then Verified on Base. Only a fingerprint goes on-chain.",
+    "api1": "The issuer team adds a data source, picks Huawei FusionSolar, types the API account’s username and password, and clicks “Check account”.",
+    "api2": "UCYield lists the plants this account can see. The team ticks a plant and a closed month.",
+    "api3": "The team checks the sample data, then clicks “Save & fetch data”. UCYield fetches the month from Huawei.",
+    "api4": "The fetched data waits for review. A reviewer checks the numbers and clicks “Anchor on Base”, signing with the issuer’s wallet.",
+    "api5": "The record goes Anchoring, then Anchored on Base, then Verified on Base. Only a fingerprint goes on-chain.",
+    "uiAddSource": "Add data source",
+    "uiSelectProvider": "Select a provider",
+    "uiHuawei": "Huawei FusionSolar",
+    "uiOAuthBtn": "Connect Huawei with OAuth",
+    "uiAsk": "UCYield wants to read your plant data",
+    "uiSignedIn": "Signed in as plant owner",
+    "uiScope1": "Plant list",
+    "uiScope2": "Monthly output (read-only)",
+    "uiAllow": "Allow",
+    "uiCancel": "Cancel",
+    "uiPlants": "Plants & month",
+    "uiMonthLbl": "Closed data month",
+    "uiSampleOk": "The sample meets the requirements.",
+    "uiSaveFetch": "Save & fetch data",
+    "uiFetching": "Fetching from the provider",
+    "uiProviderUrl": "Provider URL",
+    "uiUsername": "Username",
+    "uiPassword": "Password",
+    "uiCheckAccount": "Check account",
+    "uiConnected": "Connected. Choose one or more plants.",
+    "uiCheckData": "Check selected data",
+    "uiMetrics": "Metrics received",
+    "uiWaiting": "Waiting for review",
+    "uiAnchorBtn": "Anchor on Base",
+    "uiAnchoring": "Anchoring",
+    "uiAnchored": "Anchored on Base",
+    "uiVerified": "Verified on Base",
+    "uiPV": "PV yield",
+    "uiInv": "Inverter yield",
+    "uiCap": "Capacity",
+    "uiReceipt": "receipt",
+    "uiStamp": "VERIFIED",
+    "note": "Simplified from the issuer dashboard · illustrative values · gated pilot rollout."
   }
 }

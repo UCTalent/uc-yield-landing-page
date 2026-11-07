@@ -4,6 +4,7 @@ import { Hero } from '@/components/landing/hero';
 import { TrustBar } from '@/components/landing/trust-bar';
 import { HowItWorks } from '@/components/landing/how-it-works';
 import { Features } from '@/components/landing/features';
+import { ConnectOAuth } from '@/components/landing/connect-oauth';
 import { Technology } from '@/components/landing/technology';
 import { Pilot } from '@/components/landing/pilot';
 import { Ticker } from '@/components/landing/ticker';
@@ -22,6 +23,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
   const tb = await getTranslations('TrustBar');
   const hiw = await getTranslations('HowItWorks');
   const f = await getTranslations('Features');
+  const co = await getTranslations('Connect');
   const t = await getTranslations('Technology');
   const p = await getTranslations('Pilot');
   const faq = await getTranslations('FAQ');
@@ -36,6 +38,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
       <TrustBar dict={{ items: tb('items') }} />
       <HowItWorks dict={{ title: hiw('title'), subtitle: hiw('subtitle'), step1Title: hiw('step1Title'), step1Desc: hiw('step1Desc'), step2Title: hiw('step2Title'), step2Desc: hiw('step2Desc'), step3Title: hiw('step3Title'), step3Desc: hiw('step3Desc') }} />
       <Features dict={{ title: f('title'), subtitle: f('subtitle'), f1Title: f('f1Title'), f1Desc: f('f1Desc'), f2Title: f('f2Title'), f2Desc: f('f2Desc'), f3Title: f('f3Title'), f3Desc: f('f3Desc'), f4Title: f('f4Title'), f4Desc: f('f4Desc'), banner: f('banner') }} />
+      <ConnectOAuth dict={Object.fromEntries(['eyebrow','title','subtitle','ownerTitle','ownerSub','apiTitle','apiSub','owner1','owner2','owner3','owner4','owner5','api1','api2','api3','api4','api5','uiAddSource','uiSelectProvider','uiHuawei','uiOAuthBtn','uiAsk','uiSignedIn','uiScope1','uiScope2','uiAllow','uiCancel','uiPlants','uiMonthLbl','uiSampleOk','uiSaveFetch','uiFetching','uiProviderUrl','uiUsername','uiPassword','uiCheckAccount','uiConnected','uiCheckData','uiMetrics','uiWaiting','uiAnchorBtn','uiAnchoring','uiAnchored','uiVerified','uiPV','uiInv','uiCap','uiReceipt','uiStamp','note'].map(k => [k, co(k)]))} />
       <Technology dict={{ title: t('title'), purity: t('purity'), viewContract: t('viewContract'), readDocs: t('readDocs'), deployed: t('deployed'), verified: t('verified'), oracleBadge: t('oracleBadge'), oracleFootnote: t('oracleFootnote') }} />
       <Pilot dict={{ chip: p('chip'), title: p('title'), metric1Val: p('metric1Val'), metric1Lbl: p('metric1Lbl'), metric2Lbl: p('metric2Lbl'), metric3Lbl: p('metric3Lbl'), quote: p('quote'), cta: p('cta'), disclaimer: p('disclaimer') }} />
       <Ticker />

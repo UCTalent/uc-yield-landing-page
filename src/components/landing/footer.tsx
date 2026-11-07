@@ -42,7 +42,7 @@ export function Footer({ dict, hDict }: { dict: any; hDict: any }) {
             <ul className="flex flex-col gap-3 text-sm text-mist">
               <li>{dict.col3Item1}</li>
               <li>{dict.col3Item2}</li>
-              <li className="mt-2"><a href="mailto:hello@ucyield.com" className={linkClass}>hello@ucyield.com</a></li>
+              <li className="mt-2"><a href="mailto:khoi.nguyen@ucyield.com" className={linkClass}>khoi.nguyen@ucyield.com</a></li>
             </ul>
           </div>
         </div>

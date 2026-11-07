@@ -14,25 +14,25 @@
   },
   "Hero": {
     "badgeLive": "Live on Base Sepolia",
-    "badgeVersion": "Shadow Ledger v2",
+    "badgeVersion": "Shadow Ledger v3",
     "h1Line1": "Hạ tầng dữ liệu ",
     "h1Highlight": "real-yield",
     "h1Line2": "xác minh được",
     "h1Line3": "trên Base",
     "subtitle": "Issuer commit hash xác định của dữ liệu vận hành lên smart contract. Dữ liệu thô không bao giờ on-chain — bất kỳ ai cũng có thể xác minh lại.",
-    "ctaTry": "Dùng thử ngay →",
+    "ctaTry": "Dùng thử ngay",
     "ctaHow": "Cách hoạt động ↓",
     "trust1": "Không giữ private key",
     "trust2": "Hash xác định",
-    "trust3": "Đã verify trên Basescan",
-    "statsHashing": "100% deterministic hashing",
-    "statsBytes": "0 raw bytes on-chain",
-    "statsRoles": "5 vai trò kiểm soát truy cập",
-    "statsSteps": "3 steps to commit",
-    "ledgerTitle": "Shadow Ledger — Live commitments"
+    "trust3": "Ai cũng kiểm lại được",
+    "statsHashing": "hashing xác định",
+    "statsBytes": "byte dữ liệu thô on-chain",
+    "statsRoles": "vai trò on-chain (AccessControl)",
+    "statsSteps": "bước để commit",
+    "ledgerTitle": "Shadow Ledger — ví dụ minh họa"
   },
   "TrustBar": {
-    "items": "BASE ✦ BASESCAN VERIFIED ✦ SHADOW LEDGER ✦ NON-CUSTODIAL ✦ DETERMINISTIC HASHING ✦ AES-GCM OFF-CHAIN ✦ CAS ENERGY PILOT ✦ ORACLE-VERIFIED BY CHAINLINK CRE ✦"
+    "items": "BASE ✦ BASE SEPOLIA ✦ SHADOW LEDGER V3 ✦ NON-CUSTODIAL ✦ DETERMINISTIC HASHING ✦ AES-GCM OFF-CHAIN ✦ CAS ENERGY PILOT ✦ KIỂM CHỨNG ĐỘC LẬP ✦"
   },
   "HowItWorks": {
     "eyebrow": "Quy trình",
@@ -41,9 +41,9 @@
     "step1Title": "Tải lên & chuẩn hóa",
     "step1Desc": "File metrics được chuẩn hóa thành bytes xác định, băm keccak256 thành Merkle root.",
     "step2Title": "Ký & commit on-chain",
-    "step2Desc": "Ví của issuer (CDP/MetaMask) ký giao dịch commitData, tự trả gas, nhận receipt.",
-    "step3Title": "Oracle xác minh & niêm phong",
-    "step3Desc": "Mạng lưới oracle Chainlink CRE xác minh commitment và niêm phong trạng thái OracleVerified on-chain."
+    "step2Desc": "IssuerAdmin ký giao dịch commitBatch bằng ví nhúng CDP. Nền tảng trả phí gas, server UCYield không giữ private key.",
+    "step3Title": "Tái tính & xác minh",
+    "step3Desc": "Verifier của UCYield tái tính root từ dữ liệu gốc. Nếu khớp, verifier ghi markVerified lên chain kèm receipt đã ký."
   },
   "Features": {
     "eyebrow": "Tính năng lõi",
@@ -57,17 +57,17 @@
     "f3Desc": "Private key không bao giờ chạm vào server của chúng tôi.",
     "f4Title": "Mở rộng không đập đi xây lại",
     "f4Desc": "Thêm loại tài sản mới không đổi core — chỉ cần schemaVersion mới.",
-    "banner": "Mạng lưới Oracle Verification (Chainlink CRE) · Decentralized verification →"
+    "banner": "Phase 1: UCYield tự tái tính root và ký receipt. Ai có evidence bundle cũng kiểm lại được kết quả."
   },
   "Technology": {
     "title": "Xây bằng đồ thật, mở để kiểm chứng",
     "purity": "Engine độc lập — không phụ thuộc nội bộ",
     "viewContract": "Xem contract ↗",
     "readDocs": "Đọc tài liệu ↗",
-    "deployed": "Đã deploy:",
-    "verified": "Đã verify ✓",
-    "oracleBadge": "Xác minh oracle — đang chạy pilot trên testnet",
-    "oracleFootnote": "Mainnet verification pending DON deployment."
+    "deployed": "ShadowLedgerV3:",
+    "verified": "Xem trên Basescan ↗",
+    "oracleBadge": "Phase 1 · verifier do UCYield vận hành",
+    "oracleFootnote": "Chưa dùng Chainlink DON hay TEE. Chainlink CRE là hướng của Phase 2, chưa triển khai."
   },
   "Pilot": {
     "chip": "Pilot — CAS Energy",
@@ -83,23 +83,23 @@
   "FAQ": {
     "title": "Câu hỏi investor hay hỏi",
     "q1": "Đã lên mainnet chưa?",
-    "a1": "Chưa. Phase 1 chạy trên Base Sepolia. Mainnet cần legal readiness gate — xem footnote.",
+    "a1": "Chưa. Phase 1 chỉ chạy trên Base Sepolia (testnet). Chỉ lên mainnet sau khi qua cổng đánh giá pháp lý (legal readiness gate).",
     "q2": "Các bạn có giữ tiền hoặc private key của tôi không?",
-    "a2": "Không. Ví do bạn tự giữ (CDP/MetaMask), ký ngay trên máy bạn.",
+    "a2": "Không. Phase 1 không nhận tiền của nhà đầu tư, và server UCYield không giữ private key. Issuer ký giao dịch bằng ví nhúng CDP của chính mình.",
     "q3": "Dữ liệu thô của tôi nằm ở đâu?",
     "a3": "Off-chain, mã hóa AES-GCM. On-chain chỉ có hash, Merkle root và metadata.",
-    "q4": "Oracle xác minh thế nào?",
-    "a4": "Mạng lưới Chainlink CRE nhận commitmentId, gọi OracleConsumer on-chain và niêm phong trạng thái OracleVerified. Hiện chạy trên testnet pilot qua local simulator; bản mainnet sẽ dùng DON consensus đầy đủ.",
+    "q4": "\"Verified\" nghĩa là gì?",
+    "a4": "Sau khi commit, verifier của UCYield tái tính root từ dữ liệu gốc theo cùng đặc tả hashing. Nếu khớp, verifier ghi markVerified lên ShadowLedgerV3 kèm hash của receipt đã ký. Ở Phase 1, bên kiểm tra là chính UCYield; chưa có Chainlink DON hay TEE. Đó là hướng của Phase 2.",
     "q5": "Ai dùng issuer dashboard?",
     "a5": "Đội ngũ issuer: upload dữ liệu, ký commit, xem lịch sử commitment.",
     "q6": "Tôi xác minh độc lập thế nào?",
-    "a6": "Lấy file gốc + chạy lib hashing công khai — so root với on-chain trên Basescan."
+    "a6": "Tải evidence bundle của bản ghi, tái tính root theo đặc tả hashing trong tài liệu (hoặc chạy CLI ucy-verify), rồi so với recordRoot lưu trên ShadowLedgerV3. Bước này không cần tin server của UCYield."
   },
   "CTA": {
     "title": "Mang dữ liệu yield của bạn lên ledger.",
     "subtitle": "Testnet miễn phí · Không giữ key · 3 phút cho commitment đầu tiên.",
-    "subline": "Get OracleVerified on testnet in minutes.",
-    "btn": "Dùng thử ngay — Mở issuer dashboard →"
+    "subline": "Bản ghi đầu tiên có trạng thái Verified sau vài phút trên testnet.",
+    "btn": "Dùng thử ngay — Mở issuer dashboard"
   },
   "Footer": {
     "tagline": "Hạ tầng dữ liệu real-yield xác minh được trên Base.",
@@ -115,7 +115,7 @@
     "col3": "Pháp lý & Liên hệ",
     "col3Item1": "Phase 1 Sepolia-only",
     "col3Item2": "Pilot gated",
-    "bottom1": "© 2026 UC Yield",
+    "bottom1": "© 2026 UCYield · Sản phẩm của UCTalent-Labs",
     "bottom2": "Commitment-first · Raw data never on-chain",
     "bottom3": "Back to top ↑",
     "footnote": "Phase 1 = chỉ Sepolia · Pilot giới hạn · Mainnet cần legal readiness."
@@ -183,5 +183,57 @@
     "scopeCta": "Xem phạm vi & lộ trình",
     "metaTitle": "Documentation — UCYield",
     "metaDescription": "Hướng dẫn issuer, Shadow Ledger, UCYield Verified và kiểm chứng bằng chứng độc lập trên Base Sepolia."
+  },
+  "Connect": {
+    "eyebrow": "Kết nối nhà máy",
+    "title": "Hai cách vào. Cùng một bản ghi được kiểm tra.",
+    "subtitle": "Dữ liệu Huawei FusionSolar có thể vào bằng sự cho phép của chủ nhà máy hoặc bằng tài khoản API kỹ thuật. Cách nào cũng được duyệt, anchor lên Base và xác minh.",
+    "ownerTitle": "Chủ nhà máy cho phép",
+    "ownerSub": "Đăng nhập với Huawei · UCYield không nhận mật khẩu",
+    "apiTitle": "Đội ngũ dùng tài khoản API",
+    "apiSub": "Tài khoản kỹ thuật từ hệ thống Huawei của nhà máy",
+    "owner1": "Đội issuer thêm nguồn dữ liệu, chọn Huawei FusionSolar và bấm “Kết nối Huawei bằng OAuth”. Một cửa sổ Huawei mở ra.",
+    "owner2": "Trên trang của chính Huawei, chủ nhà máy đăng nhập và bấm Cho phép. UCYield không bao giờ thấy mật khẩu của chủ nhà máy.",
+    "owner3": "Quay lại UCYield: chọn nhà máy và một tháng đã chốt, kiểm tra dữ liệu mẫu rồi bấm “Lưu & lấy dữ liệu”.",
+    "owner4": "Dữ liệu vừa lấy chờ được duyệt. Người duyệt kiểm tra số liệu rồi bấm “Anchor lên Base”, ký bằng ví của issuer.",
+    "owner5": "Bản ghi chuyển từ Đang anchor sang Đã anchor trên Base rồi Đã xác minh trên Base. Chỉ có dấu vân tay được ghi on-chain.",
+    "api1": "Đội issuer thêm nguồn dữ liệu, chọn Huawei FusionSolar, nhập username và mật khẩu của tài khoản API rồi bấm “Kiểm tra tài khoản”.",
+    "api2": "UCYield liệt kê các nhà máy tài khoản này thấy được. Đội chọn nhà máy và một tháng đã chốt.",
+    "api3": "Đội kiểm tra dữ liệu mẫu rồi bấm “Lưu & lấy dữ liệu”. UCYield lấy dữ liệu tháng đó từ Huawei.",
+    "api4": "Dữ liệu vừa lấy chờ được duyệt. Người duyệt kiểm tra số liệu rồi bấm “Anchor lên Base”, ký bằng ví của issuer.",
+    "api5": "Bản ghi chuyển từ Đang anchor sang Đã anchor trên Base rồi Đã xác minh trên Base. Chỉ có dấu vân tay được ghi on-chain.",
+    "uiAddSource": "Thêm nguồn dữ liệu",
+    "uiSelectProvider": "Chọn nhà cung cấp",
+    "uiHuawei": "Huawei FusionSolar",
+    "uiOAuthBtn": "Kết nối Huawei bằng OAuth",
+    "uiAsk": "UCYield muốn đọc dữ liệu nhà máy của bạn",
+    "uiSignedIn": "Đã đăng nhập: chủ nhà máy",
+    "uiScope1": "Danh sách nhà máy",
+    "uiScope2": "Sản lượng theo tháng (chỉ đọc)",
+    "uiAllow": "Cho phép",
+    "uiCancel": "Hủy",
+    "uiPlants": "Nhà máy & tháng",
+    "uiMonthLbl": "Tháng dữ liệu đã chốt",
+    "uiSampleOk": "Dữ liệu mẫu đạt yêu cầu.",
+    "uiSaveFetch": "Lưu & lấy dữ liệu",
+    "uiFetching": "Đang lấy dữ liệu từ nhà cung cấp",
+    "uiProviderUrl": "URL nhà cung cấp",
+    "uiUsername": "Tên đăng nhập",
+    "uiPassword": "Mật khẩu",
+    "uiCheckAccount": "Kiểm tra tài khoản",
+    "uiConnected": "Đã kết nối. Chọn một hoặc nhiều nhà máy.",
+    "uiCheckData": "Kiểm tra dữ liệu đã chọn",
+    "uiMetrics": "Chỉ số nhận được",
+    "uiWaiting": "Chờ duyệt",
+    "uiAnchorBtn": "Anchor lên Base",
+    "uiAnchoring": "Đang anchor",
+    "uiAnchored": "Đã anchor trên Base",
+    "uiVerified": "Đã xác minh trên Base",
+    "uiPV": "Sản lượng PV",
+    "uiInv": "Sản lượng inverter",
+    "uiCap": "Công suất",
+    "uiReceipt": "biên nhận",
+    "uiStamp": "ĐÃ XÁC MINH",
+    "note": "Rút gọn từ issuer dashboard · số liệu minh họa · pilot giới hạn."
   }
 }

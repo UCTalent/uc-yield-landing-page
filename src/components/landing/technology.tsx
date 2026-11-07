@@ -5,6 +5,7 @@ import { Reveal } from '../motion/reveal';
 import { ArchitectureStrip } from './architecture-strip';
 import { SectionHeading } from './section-heading';
 import { Link } from '@/i18n/routing';
+import { LEDGER_BASESCAN_URL } from '@/constants/urls';
 
 export function Technology({ dict }: { dict: any }) {
   return (
@@ -34,7 +35,7 @@ export function Technology({ dict }: { dict: any }) {
               <div className="font-display font-bold mb-3">Shadow Ledger Registry</div>
               <div className="flex flex-wrap gap-2">
                 <span className="font-mono text-[13px] px-2.5 py-1 bg-white/5 border border-line rounded-md">AccessControl</span>
-                <span className="font-mono text-[13px] px-2.5 py-1 bg-white/5 border border-line rounded-md">commitData</span>
+                <span className="font-mono text-[13px] px-2.5 py-1 bg-white/5 border border-line rounded-md">commitBatch</span>
                 <Badge variant="outline" className="text-mist border-line">OpenZeppelin</Badge>
               </div>
             </div>
@@ -43,13 +44,12 @@ export function Technology({ dict }: { dict: any }) {
           <Reveal delay={0.3}>
             <div className="border-l-2 border-line pl-6 hover:border-cyan transition-colors mb-8">
               <div className="font-display font-bold mb-3 flex flex-wrap items-center gap-2">
-                Oracle Verification Network
+                Verification
                 {dict.oracleBadge && <Badge variant="outline" className="text-[10px] uppercase border-cyan/30 text-cyan bg-cyan/5">{dict.oracleBadge}</Badge>}
               </div>
               <div className="flex flex-wrap gap-2 mb-2">
-                <span className="font-mono text-[13px] px-2.5 py-1 bg-white/5 border border-line rounded-md">OracleConsumer</span>
-                <span className="font-mono text-[13px] px-2.5 py-1 bg-white/5 border border-line rounded-md">markOracleVerified</span>
-                <Badge variant="outline" className="text-mist border-line">Chainlink CRE</Badge>
+                <span className="font-mono text-[13px] px-2.5 py-1 bg-white/5 border border-line rounded-md">VERIFIER_ROLE</span>
+                <span className="font-mono text-[13px] px-2.5 py-1 bg-white/5 border border-line rounded-md">markVerified</span>
               </div>
               {dict.oracleFootnote && <p className="text-xs text-mist/60 mt-1">{dict.oracleFootnote}</p>}
             </div>
@@ -61,7 +61,7 @@ export function Technology({ dict }: { dict: any }) {
                 {dict.readDocs}
               </Link>
               <a 
-                href="https://sepolia.basescan.org/address/0x0DC94FAe3DD2D9852d63C996976cbb80B2F4FDD7" 
+                href={LEDGER_BASESCAN_URL} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className={buttonVariants({ variant: "outline", className: "rounded-full border-[#2A3F68] text-[#DCE6FF] hover:bg-white/5" })}
