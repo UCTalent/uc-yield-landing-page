@@ -78,7 +78,7 @@ export function Header({ locale, dict }: { locale: string; dict: any }) {
         <Link href="/" className="flex items-center">
           <Image src="/ucYield-final.png" alt="UC Yield" width={1204} height={312} className="h-[60px] w-auto object-contain hover:opacity-90 transition-opacity" />
         </Link>
-        <nav className="hidden lg:flex gap-8">
+        <nav className="hidden lg:flex gap-5">
           {[
             { id: 'how-it-works', label: dict.howItWorks },
             { id: 'features', label: dict.features },
@@ -97,6 +97,7 @@ export function Header({ locale, dict }: { locale: string; dict: any }) {
               )}
             </Link>
           ))}
+          <Link href="/docs" className="text-[15px] font-medium text-mist hover:text-ice py-1">{dict.documentation}</Link>
         </nav>
         <div className="flex items-center gap-6">
           <div className="flex bg-white/5 rounded-full p-1">
@@ -123,6 +124,7 @@ export function Header({ locale, dict }: { locale: string; dict: any }) {
           className="fixed inset-0 z-40 bg-abyss pt-[72px] px-6 flex flex-col"
         >
           <nav className="flex flex-col gap-6 mt-8 text-xl font-display font-bold">
+            <Link href="/docs" onClick={handleLinkClick} className="text-mist hover:text-ice block">{dict.documentation}</Link>
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
               <Link href="#how-it-works" onClick={handleLinkClick} className="text-mist hover:text-ice block">{dict.howItWorks}</Link>
             </motion.div>

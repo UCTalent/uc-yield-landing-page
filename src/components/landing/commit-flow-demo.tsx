@@ -7,11 +7,11 @@ import { Reveal } from '../motion/reveal';
 const LOG_SCRIPT = [
   { step: 1, time: 500, text: "[RELAYER] Preparing data payload (Hash: 0x9f...c41d)" },
   { step: 1, time: 1500, text: "[ON-CHAIN] Transmitting transaction to Base Sepolia..." },
-  { step: 2, time: 2500, text: "[ORACLE] Commitment ID: 0x8a7f... received." },
-  { step: 2, time: 3500, text: "[VERIFICATION] Off-chain verification in progress..." },
-  { step: 2, time: 4800, text: "[CONSENSUS] Node agreement: 100%. Status: VERIFIED." },
-  { step: 3, time: 6000, text: "[SHADOW-LEDGER] Updating on-chain state to markOracleVerified..." },
-  { step: 3, time: 7500, text: "[SUCCESS] Policy successfully underwritten! Tx: 0x902..." },
+  { step: 2, time: 2500, text: "[INDEXER] RecordCommitted #20 finalized." },
+  { step: 2, time: 3500, text: "[VERIFIER] Recomputing root from source data..." },
+  { step: 2, time: 4800, text: "[VERIFIER] Root matches on-chain recordRoot. Receipt signed." },
+  { step: 3, time: 6000, text: "[SHADOW-LEDGER] markVerified(id, root, receiptHash)..." },
+  { step: 3, time: 7500, text: "[SUCCESS] Status: Verified (simulated run, no real tx)." },
 ];
 
 export function CommitFlowDemo({ dict }: { dict?: any }) {
@@ -55,8 +55,8 @@ export function CommitFlowDemo({ dict }: { dict?: any }) {
       {/* Simulation Controls */}
       <div className="flex justify-between items-end">
         <div>
-          <h3 className="text-xl font-display font-bold text-white mb-2">Live Oracle Simulation</h3>
-          <p className="text-sm text-mist max-w-lg">Observe the real-time workflow from off-chain data commit to on-chain Oracle verification.</p>
+          <h3 className="text-xl font-display font-bold text-white mb-2">Commit &amp; verify simulation</h3>
+          <p className="text-sm text-mist max-w-lg">A scripted walkthrough of the Phase 1 flow: commit on Base Sepolia, then UCYield recomputes and marks the record Verified.</p>
         </div>
         <button 
           onClick={runSimulation}
@@ -119,10 +119,10 @@ export function CommitFlowDemo({ dict }: { dict?: any }) {
               )}
             </div>
             <h4 className="font-display font-bold text-ice">{dict?.step1Title || "Data Commit"}</h4>
-            <p className="text-xs text-mist text-center mt-1">Securing external data</p>
+            <p className="text-xs text-mist text-center mt-1">Canonicalize + hash</p>
           </div>
 
-          {/* Node 2: Oracle */}
+          {/* Node 2: Commit */}
           <div className="relative z-10 flex flex-col items-center w-full md:w-auto">
             <div className={`w-20 h-20 rounded-2xl flex items-center justify-center border-2 transition-all duration-500 mb-4 ${
               step === 2 ? 'bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E] shadow-[0_0_30px_rgba(34,197,94,0.2)]' : 
@@ -135,12 +135,12 @@ export function CommitFlowDemo({ dict }: { dict?: any }) {
                   animate={{ opacity: 1, scale: 1 }}
                   className="absolute -top-2 -right-2 bg-[#22C55E] text-abyss text-[10px] font-bold px-2 py-0.5 rounded-full"
                 >
-                  Verifying
+                  On-chain
                 </motion.div>
               )}
             </div>
-            <h4 className="font-display font-bold text-ice">{dict?.step2Title || "Oracle Verify"}</h4>
-            <p className="text-xs text-mist text-center mt-1">Nodes authenticating source</p>
+            <h4 className="font-display font-bold text-ice">{dict?.step2Title || "Commit"}</h4>
+            <p className="text-xs text-mist text-center mt-1">commitBatch on Base Sepolia</p>
           </div>
 
           {/* Node 3: Underwrite */}
@@ -159,8 +159,8 @@ export function CommitFlowDemo({ dict }: { dict?: any }) {
                 </motion.div>
               )}
             </div>
-            <h4 className="font-display font-bold text-ice">{dict?.step3Title || "Underwrite"}</h4>
-            <p className="text-xs text-mist text-center mt-1">Issuing confirmed policy</p>
+            <h4 className="font-display font-bold text-ice">{dict?.step3Title || "Verify"}</h4>
+            <p className="text-xs text-mist text-center mt-1">Recompute + markVerified</p>
           </div>
 
         </div>
@@ -179,7 +179,7 @@ export function CommitFlowDemo({ dict }: { dict?: any }) {
               <Lock className="w-3 h-3" /> Blockchain Verification Terminal
             </div>
             <div className="ml-auto flex items-center gap-2">
-               {isRunning && <span className="text-[10px] font-mono text-cyan animate-pulse">● LIVE_TESTNET</span>}
+               {isRunning && <span className="text-[10px] font-mono text-cyan animate-pulse">● SIMULATION</span>}
             </div>
           </div>
           <div ref={scrollContainerRef} className="p-4 font-mono text-[13px] h-[180px] overflow-y-auto leading-relaxed scroll-smooth">
@@ -200,7 +200,7 @@ export function CommitFlowDemo({ dict }: { dict?: any }) {
                   <span className="text-mist">{log.substring(0, 10)}</span>
                   <span className={
                     log.includes('[SUCCESS]') || log.includes('VERIFIED') ? 'text-[#22C55E]' :
-                    log.includes('[ORACLE]') || log.includes('[VERIFICATION]') ? 'text-cyan' :
+                    log.includes('[INDEXER]') || log.includes('[VERIFIER]') ? 'text-cyan' :
                     log.includes('[RELAYER]') ? 'text-gold' : 'text-ice'
                   }>
                     {log.substring(10)}

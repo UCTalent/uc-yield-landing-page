@@ -5,11 +5,11 @@ import { motion, AnimatePresence, useSpring, useTransform, useMotionValue, useRe
 import { Reveal } from '../motion/reveal';
 
 const simulatedData = [
-  { id: 1, name: 'CAS-SOLAR', period: '2026/01-06', hash: '0x9f…c41d', status: 'OracleVerified ✓', color: 'text-cyan', bg: 'bg-cyan/10' },
-  { id: 2, name: 'AGRI-YIELD', period: '2025/07-12', hash: '0x3a…b29f', status: 'Verified ✓', color: 'text-[#22C55E]', bg: 'bg-[#22C55E]/10' },
-  { id: 3, name: 'REAL-ESTATE', period: '2026/Q1', hash: '0x1c…d88e', status: 'Pending ⏳', color: 'text-gold', bg: 'bg-gold/10' },
+  { id: 1, name: 'CAS-SOLAR', period: '2026/01-06', hash: '0x9f…c41d', status: 'Verified ✓', color: 'text-cyan', bg: 'bg-cyan/10' },
+  { id: 2, name: 'CAS-SOLAR', period: '2025/07-12', hash: '0x3a…b29f', status: 'Verified ✓', color: 'text-[#22C55E]', bg: 'bg-[#22C55E]/10' },
+  { id: 3, name: 'CAS-SOLAR', period: '2026/07', hash: '0x1c…d88e', status: 'Pending ⏳', color: 'text-gold', bg: 'bg-gold/10' },
   { id: 4, name: 'CAS-SOLAR', period: '2026/07-12', hash: '0xe2…44a1', status: 'Verified ✓', color: 'text-[#22C55E]', bg: 'bg-[#22C55E]/10' },
-  { id: 5, name: 'WIND-FARM', period: '2025/Q4', hash: '0x7b…11c2', status: 'Pending ⏳', color: 'text-gold', bg: 'bg-gold/10' },
+  { id: 5, name: 'CAS-SOLAR', period: '2026/08', hash: '0x7b…11c2', status: 'Pending ⏳', color: 'text-gold', bg: 'bg-gold/10' },
 ];
 
 export function LedgerCard({ dict }: { dict: any }) {

@@ -3,7 +3,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useInView, useReducedMotion } from 'motion/react';
 
 export function Counter({ from = 0, to = 100, duration = 1.2, suffix = "", decimals = 0 }: { from?: number; to: number; duration?: number; suffix?: string; decimals?: number }) {
-  const [count, setCount] = useState(from);
+  // Start at the final value so SSR / no-JS readers never see the placeholder `from`.
+  const [count, setCount] = useState(to);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true });
   const prefersReducedMotion = useReducedMotion();

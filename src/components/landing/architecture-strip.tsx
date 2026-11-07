@@ -2,22 +2,23 @@
 import { useState } from 'react';
 import { Layers, Zap, Radio, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { LEDGER_BASESCAN_URL } from '@/constants/urls';
 
 export function ArchitectureStrip() {
   const [activeTab, setActiveTab] = useState(0);
 
   const steps = [
     { title: 'Hashing Engine', icon: Layers, desc: 'Off-chain aggregation' },
-    { title: 'ShadowLedger', icon: Zap, desc: 'Smart Contract' },
-    { title: 'Oracle Verification', icon: Radio, desc: 'Chainlink CRE' },
+    { title: 'ShadowLedgerV3', icon: Zap, desc: 'Smart Contract' },
+    { title: 'Verification', icon: Radio, desc: 'UCYield verifier (Phase 1)' },
     { title: 'Basescan', icon: Search, desc: 'Public Verification' }
   ];
 
   const codeSnippets = [
     '<span class="text-[#FF7B72]">import</span> { <span class="text-[#D2A8FF]">keccak256</span> } <span class="text-[#FF7B72]">from</span> <span class="text-[#A5D6FF]">"viem"</span>;\n<span class="text-[#FF7B72]">const</span> <span class="text-[#79C0FF]">root</span> <span class="text-[#FF7B72]">=</span> <span class="text-[#D2A8FF]">computeMerkleRoot</span>(leaves);',
-    '<span class="text-[#FF7B72]">function</span> <span class="text-[#D2A8FF]">commitData</span>(<span class="text-[#FF7B72]">bytes32</span> <span class="text-[#79C0FF]">root</span>) <span class="text-[#FF7B72]">public</span> {\n  <span class="text-[#D2A8FF]">require</span>(<span class="text-[#D2A8FF]">hasRole</span>(COMMITTER_ROLE));\n  <span class="text-[#8B949E]">...</span>\n}',
-    '<span class="text-[#FF7B72]">function</span> <span class="text-[#D2A8FF]">markOracleVerified</span>(<span class="text-[#FF7B72]">uint256</span> <span class="text-[#79C0FF]">id</span>) <span class="text-[#FF7B72]">external</span> {\n  <span class="text-[#D2A8FF]">require</span>(<span class="text-[#D2A8FF]">hasRole</span>(ORACLE_CONSUMER_ROLE));\n  <span class="text-[#D2A8FF]">emit</span> <span class="text-[#D2A8FF]">CommitmentOracleVerified</span>(id);\n}',
-    '<span class="text-[#8B949E]">View on Basescan:</span>\n<span class="text-[#79C0FF]">https://sepolia.basescan.org/tx/0x...</span>'
+    '<span class="text-[#FF7B72]">function</span> <span class="text-[#D2A8FF]">commitBatch</span>(<span class="text-[#FF7B72]">CommitInput[]</span> <span class="text-[#79C0FF]">items</span>) <span class="text-[#FF7B72]">external</span> {\n  <span class="text-[#D2A8FF]">require</span>(<span class="text-[#D2A8FF]">hasRole</span>(ISSUER_ROLE));\n  <span class="text-[#8B949E]">...</span>\n}',
+    '<span class="text-[#FF7B72]">function</span> <span class="text-[#D2A8FF]">markVerified</span>(<span class="text-[#FF7B72]">uint256</span> <span class="text-[#79C0FF]">id</span>, <span class="text-[#FF7B72]">bytes32</span> <span class="text-[#79C0FF]">root</span>, <span class="text-[#FF7B72]">bytes32</span> <span class="text-[#79C0FF]">receipt</span>) <span class="text-[#FF7B72]">external</span> {\n  <span class="text-[#D2A8FF]">require</span>(<span class="text-[#D2A8FF]">hasRole</span>(VERIFIER_ROLE));\n  <span class="text-[#D2A8FF]">emit</span> <span class="text-[#D2A8FF]">RecordVerified</span>(id, root, receipt, msg.sender);\n}',
+    `<span class="text-[#8B949E]">View on Basescan:</span>\n<a class="text-[#79C0FF] underline break-all" href="${LEDGER_BASESCAN_URL}" target="_blank" rel="noopener noreferrer">${LEDGER_BASESCAN_URL}</a>`
   ];
 
   return (

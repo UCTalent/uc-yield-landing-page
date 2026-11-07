@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useReducedMotion, useInView } from 'motion/react';
 import { Check, Copy } from 'lucide-react';
+import { LEDGER_BASESCAN_URL, LEDGER_SHORT } from '@/constants/urls';
 
 export function CodeWindow({ dict }: { dict: Record<string, string> }) {
   const [copied, setCopied] = useState(false);
@@ -11,14 +12,12 @@ export function CodeWindow({ dict }: { dict: Record<string, string> }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
   
-  const fullCode = `shadowLedger.commitData(
-  assetType,      // "solar"
-  projectId,      // "CAS-01"
-  periodId,       // "2026/01 - 2026/06"
-  root,           // 0x9f3a...c41d
-  dataUriHash,    // keccak256(storageUri)
-  schemaVersion   // "1.0.0"
-);`;
+  const fullCode = `shadowLedger.commitBatch([{
+  recordRoot,     // root = 0x9f3a...c41d
+  plantRef,       // salted plant id
+  recordType,     // 1..3
+  periods         // ["2026-01", "2026-02"]
+}]);`;
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -79,7 +78,7 @@ export function CodeWindow({ dict }: { dict: Record<string, string> }) {
           <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></div>
           <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></div>
         </div>
-        <div className="text-xs text-ice">commitData.sol</div>
+        <div className="text-xs text-ice">ShadowLedgerV3.sol</div>
         <button onClick={copyCode} className="ml-auto text-mist hover:text-white transition-colors">
           {copied ? <Check className="w-4 h-4 text-[#22C55E]" /> : <Copy className="w-4 h-4" />}
         </button>
@@ -90,7 +89,7 @@ export function CodeWindow({ dict }: { dict: Record<string, string> }) {
       <div className="bg-[#161B22]/50 p-3 text-center text-xs text-mist border-t border-line flex items-center justify-between">
         <div className="flex items-center text-cyan"><span className="w-2 h-2 rounded-full bg-cyan animate-pulse mr-2"></span> listening</div>
         <div>
-          {dict?.deployed || 'Deployed to'} <span className="font-mono">0x…</span> (Base Sepolia) · <span className="text-[#22C55E]">{dict?.verified || 'Verified'}</span>
+          {dict?.deployed || 'Deployed to'} <span className="font-mono">{LEDGER_SHORT}</span> (Base Sepolia) · <a href={LEDGER_BASESCAN_URL} target="_blank" rel="noopener noreferrer" className="text-[#22C55E] hover:underline">{dict?.verified || 'View on Basescan'}</a>
         </div>
       </div>
     </div>

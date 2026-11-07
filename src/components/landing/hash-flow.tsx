@@ -113,8 +113,8 @@ export function HashFlow() {
           
           <button className="p-4 bg-abyss border border-gold/50 rounded-xl shadow-[0_0_24px_rgba(255,197,49,0.15)] flex flex-col items-center relative cursor-pointer hover:border-gold transition-colors group">
             <Radio className="w-8 h-8 text-gold mb-2 group-hover:scale-110 transition-transform" />
-            <div className="font-mono text-sm text-ice font-bold border-b border-line pb-2 mb-2 w-full text-center">OracleConsumer</div>
-            <div className="font-mono text-xs text-gold bg-gold/10 border border-gold/20 p-2 rounded w-full text-center flex items-center justify-center gap-1 transition-colors group-hover:bg-gold/20"><Check className="w-3 h-3"/> OracleVerified</div>
+            <div className="font-mono text-sm text-ice font-bold border-b border-line pb-2 mb-2 w-full text-center">ShadowLedgerV3</div>
+            <div className="font-mono text-xs text-gold bg-gold/10 border border-gold/20 p-2 rounded w-full text-center flex items-center justify-center gap-1 transition-colors group-hover:bg-gold/20"><Check className="w-3 h-3"/> Verified</div>
             <AnimatePresence>
               {activeTooltip === 3 && (
                 <motion.div initial={{opacity:0, y: 10}} animate={{opacity:1, y:0}} exit={{opacity:0, y:10}} className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-black px-3 py-1 rounded text-xs whitespace-nowrap z-20 shadow-xl">
